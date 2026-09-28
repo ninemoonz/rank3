@@ -12,8 +12,8 @@ class Hub(BaseModel):
     def __init__(self, hub_name: str,
                  x_axis: int, y_axis: int, metadata: Optional[str]) -> None:
         self.hub_name: str = hub_name
-        x_axis: int = Field(ge=0)
-        y_axis: int = Field(ge=0)
+        self.x_axis: int = x_axis Field(ge=0)
+        self.y_axis: int = Field(ge=0)
         metadata: Optional[list[str]]
 
     @model_validator(mode='after')
