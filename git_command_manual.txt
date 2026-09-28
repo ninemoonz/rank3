@@ -1,0 +1,11 @@
+[Daily workflow]
+git add fly_in/... && git commit -m "..."
+git push origin main                                   # GitHub, everything
+git subtree push --prefix=fly_in vogsphere master      # Vogsphere, fly_in only
+
+[You can shorten the Vogsphere push with an alias]
+git config alias.push-flyin 'subtree push --prefix=fly_in vogsphere master'
+git push-flyin
+
+[Pulling from Vogsphere ("read")]
+git subtree pull --prefix=fly_in vogsphere master
