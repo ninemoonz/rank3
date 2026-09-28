@@ -1,3 +1,6 @@
+from class_model import HubsFactory, Hub
+
+
 def file_opener(file_name: str) -> tuple[list[str], list[str]]:
     hub_data: tuple[str, ...] = ()
     parsed_hubs: list[tuple[str, ...]] = []
@@ -26,7 +29,5 @@ def file_opener(file_name: str) -> tuple[list[str], list[str]]:
 if __name__ == "__main__":
     file_name = "./maps/easy/03_basic_capacity.txt"
     parsed_hubs, parsed_connections = file_opener(file_name)
-    for hub in parsed_hubs:
-        print(f"hub: {hub}")
-    for cn in parsed_connections:
-        print(f"connection: {cn}")
+    hub_fact = HubsFactory().make_hub(parsed_hubs)
+    print(hub_fact)

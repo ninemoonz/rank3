@@ -1,27 +1,25 @@
-from pydantic import BaseModel, Field, model_validator, ValidationError
+from pydantic import BaseModel, Field, model_validator
 from typing import Optional
 
 
-class Zone(BaseModel):
-    drones: int = Field(gt=0)
-    hubs: list[str, tuple[int, int], Optional[str]]
-    connections: list[tuple[str, str, Optional[str]]]
-
-
 class Hub(BaseModel):
-    def __init__(self, hub_name: str,
-                 x_axis: int, y_axis: int, metadata: Optional[str]) -> None:
-        self.hub_name: str = hub_name
-        self.x_axis: int = x_axis Field(ge=0)
-        self.y_axis: int = Field(ge=0)
-        metadata: Optional[list[str]]
-
-    @model_validator(mode='after')
-    def hubs_check(self) -> None:
-        ...
-        return self
+    hub_name: str = Field(min_length=1)
+    x_axis: str
+    y_axis: str
+    metadata: Optional[list[str]] = None
 
 
-class HubsFactory():
-    def __init__(self, hubs: list[Hub]) -> Hub:
-        ...
+class HubsFactory:
+    def make_hub(self, hub_info: list[str]) -> list[Hub]:
+        new_hub = Hub()
+        hub_list: list[Hub] = []
+        for hub in hub_info:
+            new_hub.hub_name = hub[0]
+            new_hub.x_axis = hub[1]
+            new_hub.y_axis = hub[2]
+            if hub[3]:
+                new_hub.metadata = hub[3]
+            else:
+                new_hub.metadata = None
+            hub_list.append(new_hub)
+        return hub_list
