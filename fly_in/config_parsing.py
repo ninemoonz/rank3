@@ -28,7 +28,7 @@ def file_opener(file_name: str) -> list[tuple[str, str, str]]:
 
 
 if __name__ == "__main__":
-    file_name = "./maps/hard/03_ultimate_challenge.txt"
+    file_name = "./maps/easy/03_basic_capacity.txt"
     parsed_hubs, parsed_connections = file_opener(file_name)
     for hub in parsed_hubs:
         print(f"hub: {hub}")
