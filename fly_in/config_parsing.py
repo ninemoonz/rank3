@@ -1,11 +1,7 @@
-import sys
-from typing import Optional
-
-
-def file_opener(file_name: str) -> list[tuple[str, str, str]]:
-    hub_data: tuple[str, str, str, str] = ()
-    parsed_hubs: list[tuple[str, str, str]] = []
-    parsed_connections: list[tuple[str, str, str]] = []
+def file_opener(file_name: str) -> tuple[list[str], list[str]]:
+    hub_data: tuple[str, ...] = ()
+    parsed_hubs: list[tuple[str, ...]] = []
+    parsed_connections: list[tuple[str, ...]] = []
     try:
         with open(file_name, "r") as f:
             for raw_line in f:
@@ -19,7 +15,7 @@ def file_opener(file_name: str) -> list[tuple[str, str, str]]:
                 if clean_key in ("start_hub", "hub", "end_hub"):
                     hub_data = value.strip().split(maxsplit=3)
                     parsed_hubs.append(hub_data)
-                if clean_key == "connection":
+                elif clean_key == "connection":
                     connection_data = value.strip().replace('-', ' ').split(' ', maxsplit=2)
                     parsed_connections.append(connection_data)
     except IOError as e:
