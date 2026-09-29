@@ -1,25 +1,34 @@
-from pydantic import BaseModel, Field, model_validator
-from typing import Optional
+class Hub():
+    def __init__(self,
+                 name: str,
+                 coord: tuple[int, int],
+                 metadata: str | None) -> None:
+        self.name = name
+        self.coord = coord
+        self.metadata = metadata
 
-
-class Hub(BaseModel):
-    hub_name: str = Field(min_length=1)
-    x_axis: str
-    y_axis: str
-    metadata: Optional[list[str]] = None
+    def descripe(self) -> None:
+        print(f"hub name: {self.name}")
+        print(f"coordinate: {self.coord}")
+        print(f"metadata: {self.metadata}")
 
 
 class HubsFactory:
     def make_hub(self, hub_info: list[str]) -> list[Hub]:
-        new_hub = Hub()
+        hub_coord: tuple[int, int] = ()
         hub_list: list[Hub] = []
         for hub in hub_info:
-            new_hub.hub_name = hub[0]
-            new_hub.x_axis = hub[1]
-            new_hub.y_axis = hub[2]
+            hub_name: str = hub[0]
+            try:
+                x_axis = int(hub[1])
+                y_axis = int(hub[2])
+            except ValueError as e:
+                print(f"Not able to convert to int: {e}")
+            hub_coord = (x_axis, y_axis)
             if hub[3]:
-                new_hub.metadata = hub[3]
+                metadata = hub[3]
             else:
-                new_hub.metadata = None
+                metadata = None
+            new_hub = Hub(hub_name, hub_coord, metadata)
             hub_list.append(new_hub)
         return hub_list
