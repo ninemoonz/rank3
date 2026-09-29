@@ -2,12 +2,12 @@ class Hub():
     def __init__(self,
                  name: str,
                  coord: tuple[int, int],
-                 metadata: str | None) -> None:
+                 metadata: dict[str, int] | None) -> None:
         self.name = name
         self.coord = coord
         self.metadata = metadata
 
-    def descripe(self) -> None:
+    def describe(self) -> None:
         print(f"hub name: {self.name}")
         print(f"coordinate: {self.coord}")
         print(f"metadata: {self.metadata}")
