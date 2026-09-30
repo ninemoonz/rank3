@@ -29,29 +29,22 @@ class Hub(BaseModel):
         print(f"[metadata]\n"
               f"- zone: {self.zone}\n"
               f"- color: {self.color}\n"
-              f"- max drones: {self.max_drones}")
+              f"- max drones: {self.max_drones}\n")
 
 
 class HubsFactory:
-    def make_hub(self, hub_info: list[str]) -> list[Hub]:
+    def make_hubs(self, hub_info: tuple[str, ...]) -> list[Hub]:
         hub_list: list[Hub] = []
         for hub in hub_info:
             hub_name: str = hub[0]
-            try:
-                x_axis = int(hub[1])
-                y_axis = int(hub[2])
-            except ValueError as e:
-                print(f"Not able to convert to int: {e}")
-            hub_coord: tuple[int, int] = (x_axis, y_axis)
-            if hub[3]:
-                meta_dict: dict[str, str] = hub[3]
+            hub_coord: tuple[int, int] = hub[1]
+            if hub[2]:
+                meta_dict: dict[str, str] = hub[2] or {}
             else:
                 continue
             new_hub = Hub(name=hub_name,
-                    coord=hub_coord,
-                    zone=meta_dict["zone"],
-                    color=meta_dict["color"],
-                    max_drones=int(meta_dict["max_drones"]))
+                          coord=hub_coord,
+                          **meta_dict)
             hub_list.append(new_hub)
         return hub_list
 
