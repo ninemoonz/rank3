@@ -19,12 +19,12 @@ class Parser:
                             print(e)
                     elif clean_key in ("start_hub", "hub", "end_hub"):
                         raw_data: str = value
-                        parsed_hubs.append(raw_data)
+                        parsed_hubs.append((clean_key, raw_data))
                     elif clean_key == "connection":
                         connection_data = value
                         parsed_connections.append(connection_data)
         except IOError as e:
-            print(e)
+            print(f"Cannot open file {e}")
         return drones, parsed_hubs, parsed_connections
 
     def parse_drones(drones: str) -> int:
@@ -36,8 +36,8 @@ class Parser:
 
     def parse_hubs(hubs_data: list[str]) -> tuple[str, ...]:
         return_hubs: list[str] = []
-        for raw_data in hubs_data:
-            polished: list[str] = []
+        for hub_type, raw_data in hubs_data:
+            polished: list[str] = [hub_type]
             hub_data_split = raw_data.strip().split(' ', maxsplit=3)
             if hub_data_split[0]:
                 polished.append(hub_data_split[0])
@@ -58,6 +58,8 @@ class Parser:
                 return_hubs.append(polished)
             else:
                 continue
+        for ahub in return_hubs:
+            print(ahub)
         return tuple(return_hubs)
 
     def parse_connections(connection_data: list[str]) -> tuple[str, ...]:

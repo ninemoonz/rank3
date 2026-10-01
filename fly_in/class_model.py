@@ -3,13 +3,21 @@ from typing import Optional
 
 
 class Drone(BaseModel):
-    drone_nb: int = Field(ge=0)
-    before_hub: tuple[str, tuple[int, int]]
-    present_hub: tuple[str, tuple[int, int]]
-    next_hub: tuple[str, tuple[int, int]]
+    drone_nb: int
+    before_hub: Optional[tuple[str, tuple[int, int]]] = Field(default=None)
+    present_hub: tuple[str, tuple[int, int]] = Field(default=None)
+    next_hub: Optional[tuple[str, tuple[int, int]]] = Field(default=None)
+
+    def describe(self) -> None:
+        print("[Drones Description]")
+        print(f"- drone number: {self.drone_nb}")
+        print(f"- Past Hub: {self.before_hub}")
+        print(f"- Current Hub: {self.present_hub}")
+        print(f"- Next Hub: {self.next_hub}\n")
 
 
 class Hub(BaseModel):
+    hub_type: str = Field(min_length=1)
     name: str = Field(min_length=1)
     coord: tuple[int, int]
     zone: Optional[str] = Field(default="normal")
@@ -21,12 +29,16 @@ class Hub(BaseModel):
         for ch in self.name:
             if ch == '-' or ch == ' ':
                 raise ValueError("Not dash or space in a hub name.")
+        if self.zone not in ("normal", "blocked", "restricted", "priority"):
+            raise ValueError("zone type should be one of four: "
+                             "'normal', 'blocked', 'restricted', 'priority'")
         return self
 
     def describe(self) -> None:
         print("[Description]")
-        print(f"hub name: {self.name}")
-        print(f"coordinate: {self.coord}")
+        print(f"- hub type: {self.hub_type}")
+        print(f"- hub name: {self.name}")
+        print(f"- coordinate: {self.coord}")
         print(f"[metadata]\n"
               f"- zone: {self.zone}\n"
               f"- color: {self.color}\n"
@@ -55,30 +67,44 @@ class Connection(BaseModel):
 
     def describe(self) -> None:
         print("[Description]")
-        print(f"Connection from: {self.hub_from}")
-        print(f"Connection to: {self.hub_to}")
-        print(f"Max link capacity: {self.max_link_capacity}\n")
+        print(f"- Connection from: {self.hub_from}")
+        print(f"- Connection to: {self.hub_to}")
+        print(f"- Max link capacity: {self.max_link_capacity}\n")
+
+
+class DronesFactory:
+    def make_drones(self, drone_info: int) -> list[Drone]:
+        drone_list: list[Drone] = []
+        for i in range(drone_info):
+            new_drone = Drone(drone_nb=i)
+            drone_list.append(new_drone)
+        return drone_list
 
 
 class HubsFactory:
-    def make_hubs(self, hub_info: tuple[str, ...]) -> list[Hub]:
+    def make_hubs(self, hub_info: tuple[str, ...], drones: int) -> list[Hub]:
         hub_list: list[Hub] = []
         for hub in hub_info:
-            hub_name: str = hub[0]
-            hub_coord: tuple[int, int] = hub[1]
+            hub_type: str = hub[0]
+            hub_name: str = hub[1]
+            hub_coord: tuple[int, int] = hub[2]
             if len(hub) > 2:
-                meta_dict: dict[str, str] = hub[2] or {}
+                meta_dict: dict[str, str] = hub[3] or {}
             else:
                 meta_dict = {}
-            new_hub = Hub(name=hub_name,
+            new_hub = Hub(hub_type=hub_type,
+                          name=hub_name,
                           coord=hub_coord,
                           **meta_dict)
+            if hub_type in ("start_hub", "end_hub"):
+                new_hub.max_drones = drones
             hub_list.append(new_hub)
         return hub_list
 
 
 class ConnectionsFactory:
-    def make_connections(self, connection_info: tuple[str, ...]) -> list[Connection]:
+    def make_connections(self,
+                         connection_info: tuple[str, ...]) -> list[Connection]:
         conn_list: list[Connection] = []
         for conn in connection_info:
             conn_from: str = conn[0]
@@ -92,43 +118,3 @@ class ConnectionsFactory:
                                   **meta_dict)
             conn_list.append(new_conn)
         return conn_list
-
-
-# class Hub:
-#     def __init__(self,
-#                  name: str,
-#                  coord: tuple[int, int],
-#                  metadata: dict[str, str | int] | None) -> None:
-#         self.name = name
-#         self.coord = coord
-#         self.zone: Optional[str] = metadata["zone"]
-#         self.color: Optional[str] = metadata["color"]
-#         self.max_drones: Optional[int] = metadata["max_drones"]
-
-#     def describe(self) -> None:
-#         print(f"hub name: {self.name}")
-#         print(f"coordinate: {self.coord}")
-#         print(f"metadata:\n"
-#               f"zone: {self.zone}\n"
-#               f"color: {self.color}\n"
-#               f"max drones: {self.max_drones}")
-
-
-# class HubsFactory:
-#     def make_hub(self, hub_info: list[str]) -> list[Hub]:
-#         hub_list: list[Hub] = []
-#         for hub in hub_info:
-#             hub_name: str = hub[0]
-#             try:
-#                 x_axis = int(hub[1])
-#                 y_axis = int(hub[2])
-#             except ValueError as e:
-#                 print(f"Not able to convert to int: {e}")
-#             hub_coord: tuple[int, int] = (x_axis, y_axis)
-#             if hub[3]:
-#                 meta_dict: dict[str, str] = hub[3]
-#             else:
-#                 meta_dict = None
-#             new_hub = Hub(hub_name, hub_coord, meta_dict)
-#             hub_list.append(new_hub)
-#         return hub_list
