@@ -20,7 +20,7 @@ class Hub(BaseModel):
     def hub_validation(self) -> 'Hub':
         for ch in self.name:
             if ch == '-' or ch == ' ':
-                raise ValueError("Not dash in hub name.")
+                raise ValueError("Not dash or space in a hub name.")
         return self
 
     def describe(self) -> None:
@@ -30,6 +30,31 @@ class Hub(BaseModel):
               f"- zone: {self.zone}\n"
               f"- color: {self.color}\n"
               f"- max drones: {self.max_drones}\n")
+
+
+class Connection(BaseModel):
+    hub_from: str
+    hub_to: str
+    max_link_cap: int = Field(default=1)
+
+    @model_validator(mode='after')
+    def conn_validator(self) -> 'Connection':
+        for ch in self.hub_from:
+            if ch == '-' or ch == ' ':
+                raise ValueError("No dash or space in a hub name. "
+                                 f"{self.hub_from}")
+        for ch in self.hub_to:
+            if ch == '-' or ch == ' ':
+                raise ValueError("No dash or space in a hub name. "
+                                 f"{self.hub_to}")
+        if self.max_link_cap < 0:
+            raise ValueError("Max link capacity should be positive number. "
+                             f"{self.max_link_cap}")
+        return self
+
+
+class ConnectionsFactory:
+    ...
 
 
 class HubsFactory:
