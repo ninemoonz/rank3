@@ -24,6 +24,7 @@ class Hub(BaseModel):
         return self
 
     def describe(self) -> None:
+        print("[Description]")
         print(f"hub name: {self.name}")
         print(f"coordinate: {self.coord}")
         print(f"[metadata]\n"
@@ -35,7 +36,7 @@ class Hub(BaseModel):
 class Connection(BaseModel):
     hub_from: str
     hub_to: str
-    max_link_cap: int = Field(default=1)
+    max_link_capacity: Optional[int] = Field(default=1)
 
     @model_validator(mode='after')
     def conn_validator(self) -> 'Connection':
@@ -47,14 +48,16 @@ class Connection(BaseModel):
             if ch == '-' or ch == ' ':
                 raise ValueError("No dash or space in a hub name. "
                                  f"{self.hub_to}")
-        if self.max_link_cap < 0:
+        if self.max_link_capacity < 0:
             raise ValueError("Max link capacity should be positive number. "
-                             f"{self.max_link_cap}")
+                             f"{self.max_link_capacity}")
         return self
 
-
-class ConnectionsFactory:
-    ...
+    def describe(self) -> None:
+        print("[Description]")
+        print(f"Connection from: {self.hub_from}")
+        print(f"Connection to: {self.hub_to}")
+        print(f"Max link capacity: {self.max_link_capacity}\n")
 
 
 class HubsFactory:
@@ -63,15 +66,32 @@ class HubsFactory:
         for hub in hub_info:
             hub_name: str = hub[0]
             hub_coord: tuple[int, int] = hub[1]
-            if hub[2]:
+            if len(hub) > 2:
                 meta_dict: dict[str, str] = hub[2] or {}
             else:
-                continue
+                meta_dict = {}
             new_hub = Hub(name=hub_name,
                           coord=hub_coord,
                           **meta_dict)
             hub_list.append(new_hub)
         return hub_list
+
+
+class ConnectionsFactory:
+    def make_connections(self, connection_info: tuple[str, ...]) -> list[Connection]:
+        conn_list: list[Connection] = []
+        for conn in connection_info:
+            conn_from: str = conn[0]
+            conn_to: str = conn[1]
+            if len(conn) > 2:
+                meta_dict: dict[str, str] = conn[2] or {}
+            else:
+                meta_dict = {}
+            new_conn = Connection(hub_from=conn_from,
+                                  hub_to=conn_to,
+                                  **meta_dict)
+            conn_list.append(new_conn)
+        return conn_list
 
 
 # class Hub:
