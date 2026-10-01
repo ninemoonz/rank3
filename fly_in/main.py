@@ -1,5 +1,5 @@
 from config_parsing import Parser
-from class_model import HubsFactory, ConnectionsFactory, DronesFactory
+from factories import HubsFactory, ConnectionsFactory, DronesFactory
 
 
 def tester(val: int) -> None:
@@ -26,4 +26,5 @@ def tester(val: int) -> None:
 
 
 if __name__ == "__main__":
-    tester(2)
+    for i in range(3):
+        tester(i)
