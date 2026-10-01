@@ -1,6 +1,3 @@
-from typing import TextIO
-
-
 class Parser:
     def file_opener(file_name: str) -> tuple[str, list[str], list[str]]:
         parsed_hubs: list[str] = []
@@ -38,7 +35,7 @@ class Parser:
         return int_drones
 
     def parse_hubs(hubs_data: list[str]) -> tuple[str, ...]:
-        return_hubs = []
+        return_hubs: list[str] = []
         for raw_data in hubs_data:
             polished: list[str] = []
             hub_data_split = raw_data.strip().split(' ', maxsplit=3)
@@ -46,11 +43,12 @@ class Parser:
                 polished.append(hub_data_split[0])
             if hub_data_split[1] and hub_data_split[2]:
                 try:
-                    coord: tuple[int, int] = (int(hub_data_split[1]), int(hub_data_split[2]))
+                    coord: tuple[int, int] = (int(hub_data_split[1]),
+                                              int(hub_data_split[2]))
                     polished.append(coord)
                 except ValueError as e:
                     print(e)
-            if hub_data_split[3]:
+            if len(hub_data_split) > 3:
                 meta_list: list[dict[str, str]] = {}
                 meta_split = hub_data_split[3].strip('[]').split(' ')
                 for data in meta_split:
@@ -62,8 +60,25 @@ class Parser:
                 continue
         return tuple(return_hubs)
 
-    def parse_connections(connection_data: list[str]) -> list[str]:
-        print(connection_data)
+    def parse_connections(connection_data: list[str]) -> tuple[str, ...]:
+        return_connections: list[str] = []
+        for raw_data in connection_data:
+            split_data = (raw_data.strip().replace(' ', '-')
+                          .split('-', maxsplit=2))
+            polish_data: list[str] = []
+            if split_data[0]:
+                polish_data.append(split_data[0])
+            if split_data[1]:
+                polish_data.append(split_data[1])
+            if len(split_data) > 2:
+                meta_list: list[dict[str, str]] = {}
+                meta_split = split_data[2].strip('[]').split(' ')
+                for data in meta_split:
+                    key, value = data.strip().split('=')
+                    meta_list[key] = value
+                polish_data.append(meta_list)
+            return_connections.append(polish_data)
+        return tuple(return_connections)
 
     # def file_opener(file_name: str) -> tuple[int, list[str], list[str]]:
     #     meta_list: dict[str, str] = {}
