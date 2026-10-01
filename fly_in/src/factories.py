@@ -1,4 +1,4 @@
-from class_model import Drone, Hub, Connection
+from .class_model import Drone, Hub, Connection
 
 
 class DronesFactory:

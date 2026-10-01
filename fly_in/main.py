@@ -1,5 +1,4 @@
-from config_parsing import Parser
-from factories import HubsFactory, ConnectionsFactory, DronesFactory
+from src import Parser, HubsFactory, ConnectionsFactory, DronesFactory
 
 
 def tester(val: int) -> None:
