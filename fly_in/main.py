@@ -19,9 +19,9 @@ class MapGen:
 
     def make_grid(grid_info) -> list[list[int]]:
         grid: list[list[int]] = []
-        for _ in range(grid_info[1]):
+        for _ in range(grid_info[1] + 1):
             row_list: list[int] = []
-            for i in range(grid_info[0]):
+            for i in range(grid_info[0] + 1):
                 row_list.append(i)
             grid.append(row_list)
         return grid
