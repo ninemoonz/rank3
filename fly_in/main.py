@@ -28,7 +28,7 @@ class MapGen:
 
 
 def tester(val: int) -> None:
-    file_name = "./maps/hard/01_maze_nightmare.txt"
+    file_name = "./maps/hard/02_capacity_hell.txt"
     drones, raw_hubs, raw_connections = Parser.file_opener(file_name)
     clean_drones = Parser.parse_drones(drones)
     clean_hubs = Parser.parse_hubs(raw_hubs)
