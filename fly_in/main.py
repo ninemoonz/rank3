@@ -1,9 +1,10 @@
-from src import Parser, HubsFactory, ConnectionsFactory, DronesFactory, Hub
-from grid_gen import MapGen
+from src import (Parser,
+                 HubsFactory, ConnectionsFactory, DronesFactory,
+                 Hub, MapGen)
 
 
 def tester(val: int):
-    file_name = "./maps/medium/03_priority_puzzle.txt"
+    file_name = "./maps/hard/03_ultimate_challenge.txt"
     drones, raw_hubs, raw_connections = Parser.file_opener(file_name)
     clean_drones = Parser.parse_drones(drones)
     clean_hubs = Parser.parse_hubs(raw_hubs)
@@ -28,6 +29,8 @@ if __name__ == "__main__":
     for y, line in enumerate(new_map):
         for x, ele in enumerate(line):
             if type(ele) is Hub:
-                new_map[y][x] = ele.name
+                new_map[y][x] = "O"
+            elif ele is None:
+                new_map[y][x] = "X"
     for line in new_map:
         print(line)
