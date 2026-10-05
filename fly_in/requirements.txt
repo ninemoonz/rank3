@@ -1,2 +1,2 @@
 pydantic
-pygame
+pygame-ce
