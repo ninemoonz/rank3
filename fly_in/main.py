@@ -27,13 +27,5 @@ if __name__ == "__main__":
     drone_list = tester(2)
     map_gen = MapGen(hub_list)
     new_map = map_gen.place_hubs()
-    for y, line in enumerate(new_map):
-        for x, ele in enumerate(line):
-            if type(ele) is Hub:
-                new_map[y][x] = "O"
-            elif ele is None:
-                new_map[y][x] = " "
-    for line in new_map:
-        print(line)
     rendered = RenderMap("priority_puzzle", hub_list)
     rendered.render_map()

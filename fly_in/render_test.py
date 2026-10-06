@@ -9,22 +9,34 @@ class RenderMap:
         self.x_min, self.x_max, self.y_min, self.y_max = (MapGen(hub_list)
                                                           .calc_grid())
 
-    def coord_calibration(self, margin: int, cell: int):
+    def extract_data(self) -> list[list[str, tuple[int, int], str]]:
+        hubs: list[list[str, tuple[int, int], str]] = []
         for hub in self.hub_list:
-            x, y = hub.coord
-            px = margin + (x - self.x_min) * cell
-            py = margin + (y - self.y_min) * cell
+            data: list[str, tuple[int, int], str] = []
+            data.append(hub.name)
+            data.append(hub.coord)
+            data.append(hub.color)
+            hubs.append(data)
+        for one in hubs:
+            print(one)
+        return hubs
+
+    def coord_calibration(self,
+                          margin: int,
+                          cell: int,
+                          coord: tuple[int, int]) -> tuple[int, int]:
+        px = margin + (coord[0] - self.x_min) * cell
+        py = margin + (coord[1] - self.y_min) * cell
+        return px, py
 
     def render_map(self) -> None:
-        pygame.init()
         cell: int = 120
-        margin: int = 120
+        margin: int = 60
         width: int = 2 * margin + (self.x_max - self.x_min) * cell
         height: int = 2 * margin + (self.y_max - self.y_min) * cell
-        if self.x_min < 0:
-            ...
+        pygame.init()
         screen = pygame.display.set_mode((width, height))
-        pygame.display.set_caption(self.map_name)
+        pygame.display.set_caption(f"Fly_in: {self.map_name}")
         clock = pygame.time.Clock()
         font = pygame.font.SysFont(None, 20)
         running = True
@@ -34,16 +46,14 @@ class RenderMap:
                     running = False
             screen.fill((0, 0, 0))
             # Between this as a hidden canvas before display
-            pygame.draw.circle(screen, (0, 255, 0), (width / 2,
-                                                     height / 2), 10, 3)
-
-            # rect = pygame.Rect(100, 100, 144, 80)
-            # pygame.draw.rect(screen, "grey", rect, 3)
-            label = font.render("start", True, (0, 255, 0))
-            label_width = label.get_width()
-            label_x = (width / 2) - (label_width / 2)
-            label_y = (height / 2) + 10 + 10
-            screen.blit(label, (label_x, label_y))
+            hubs = self.extract_data()
+            for hub in hubs:
+                name = hub[0]
+                px, py = self.coord_calibration(margin, cell, hub[1])
+                color = hub[2]
+                pygame.draw.circle(screen, color, (px, py), 18)
+                label = font.render(name, True, (255, 255, 255))
+                screen.blit(label, (px - label.get_width() / 2, py + 24))
 
             # Between this as a hidden canvas before display
             pygame.display.flip()
