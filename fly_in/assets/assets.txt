@@ -1,0 +1,1 @@
+This is asset folder for pixel png of drones, hubs, and connections.
