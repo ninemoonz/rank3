@@ -9,9 +9,9 @@ from src import (Parser,
 def tester(val: int):
     file_name = "./maps/medium/03_priority_puzzle.txt"
     drones, raw_hubs, raw_connections = Parser.file_opener(file_name)
-    clean_drones = Parser.parse_drones(drones)
-    clean_hubs = Parser.parse_hubs(raw_hubs)
-    clean_conn = Parser.parse_connections(raw_connections)
+    clean_drones = Parser(drones).parse_drones()
+    clean_hubs = Parser(raw_hubs).parse_hubs()
+    clean_conn = Parser(raw_connections).parse_connections()
     if val == 0:
         produced_hubs = HubsFactory().make_hubs(clean_hubs, clean_drones)
         return produced_hubs

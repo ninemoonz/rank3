@@ -1,9 +1,12 @@
 class Parser:
-    def file_opener(file_name: str) -> tuple[str, list[str], list[str]]:
+    def __init__(self, file_name: str) -> None:
+        self.file_name = file_name
+
+    def file_opener(self) -> tuple[str, list[str], list[str]]:
         parsed_hubs: list[str] = []
-        parsed_connections: list[tuple[str, ...]] = []
+        parsed_connections: list[str] = []
         try:
-            with open(file_name, "r") as f:
+            with open(self.file_name, "r") as f:
                 for raw_line in f:
                     line = raw_line.strip()
                     if line == "" or line.startswith("#"):
@@ -19,7 +22,8 @@ class Parser:
                             print(e)
                     elif clean_key in ("start_hub", "hub", "end_hub"):
                         raw_data: str = value
-                        parsed_hubs.append((clean_key, raw_data))
+                        parsed_hubs.append(clean_key)
+                        parsed_hubs.append(raw_data)
                     elif clean_key == "connection":
                         connection_data = value
                         parsed_connections.append(connection_data)
@@ -27,9 +31,9 @@ class Parser:
             print(f"Cannot open file {e}")
         return drones, parsed_hubs, parsed_connections
 
-    def parse_drones(drones: str) -> int:
+    def parse_drones(self) -> int:
         try:
-            int_drones = int(drones)
+            int_drones = int(self.drones)
         except ValueError as e:
             print(e)
         return int_drones
