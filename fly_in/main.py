@@ -4,7 +4,7 @@ from src import (Parser,
 
 
 def tester(val: int):
-    file_name = "./maps/hard/03_ultimate_challenge.txt"
+    file_name = "./maps/challenger/01_the_impossible_dream.txt"
     drones, raw_hubs, raw_connections = Parser.file_opener(file_name)
     clean_drones = Parser.parse_drones(drones)
     clean_hubs = Parser.parse_hubs(raw_hubs)
@@ -31,6 +31,6 @@ if __name__ == "__main__":
             if type(ele) is Hub:
                 new_map[y][x] = "O"
             elif ele is None:
-                new_map[y][x] = "X"
+                new_map[y][x] = " "
     for line in new_map:
         print(line)
