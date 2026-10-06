@@ -1,7 +1,9 @@
-from src import (Parser,
-                 HubsFactory, ConnectionsFactory, DronesFactory,
-                 Hub, MapGen)
 from render_test import RenderMap
+from src import (Parser,
+                 HubsFactory,
+                 ConnectionsFactory,
+                 DronesFactory,
+                 MapGen)
 
 
 def tester(val: int):
@@ -27,5 +29,5 @@ if __name__ == "__main__":
     drone_list = tester(2)
     map_gen = MapGen(hub_list)
     new_map = map_gen.place_hubs()
-    rendered = RenderMap("priority_puzzle", hub_list)
+    rendered = RenderMap("priority_puzzle", hub_list, conn_list)
     rendered.render_map()
