@@ -23,7 +23,7 @@ while running:
     label_x = 400 - label.get_width() / 2
     label_y = 300 + 30 + 6
     screen.blit(label, (label_x, label_y))
-    
+    # Between this as a hidden canvas before display
     pygame.display.flip()
     clock.tick(60)
 
