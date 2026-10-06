@@ -3,8 +3,9 @@ from src import (Parser,
                  Hub, MapGen)
 from render_test import RenderMap
 
+
 def tester(val: int):
-    file_name = "./maps/hard/01_maze_nightmare.txt"
+    file_name = "./maps/medium/03_priority_puzzle.txt"
     drones, raw_hubs, raw_connections = Parser.file_opener(file_name)
     clean_drones = Parser.parse_drones(drones)
     clean_hubs = Parser.parse_hubs(raw_hubs)
@@ -34,5 +35,5 @@ if __name__ == "__main__":
                 new_map[y][x] = " "
     for line in new_map:
         print(line)
-    rendered = RenderMap("maze_nightmare", hub_list)
+    rendered = RenderMap("priority_puzzle", hub_list)
     rendered.render_map()
