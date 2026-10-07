@@ -2,6 +2,7 @@ RawHub = tuple[str, str]
 HubData = tuple[str, str, tuple[int, int], dict[str, str]]
 ConnData = tuple[str, str, dict[str, str]]
 
+
 class Parser:
     @staticmethod
     def file_opener(file_name: str) -> tuple[str, list[RawHub], list[str]]:

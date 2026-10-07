@@ -1,6 +1,7 @@
 from .class_model import Drone, Hub, Connection
 from .config_parsing import HubData, ConnData
 
+
 class DronesFactory:
     def make_drones(self, drone_info: int) -> list[Drone]:
         drone_list: list[Drone] = []
@@ -11,7 +12,9 @@ class DronesFactory:
 
 
 class HubsFactory:
-    def make_hubs(self, hub_info: tuple[HubData, ...], drones: int) -> list[Hub]:
+    def make_hubs(self,
+                  hub_info: tuple[HubData, ...],
+                  drones: int) -> list[Hub]:
         hub_list: list[Hub] = []
         for hub in hub_info:
             hub_type: str = hub[0]
@@ -30,9 +33,9 @@ class HubsFactory:
 
 class ConnectionsFactory:
     def make_connections(self,
-                         connection_info: tuple[ConnData, ...]) -> list[Connection]:
+                         conn_info: tuple[ConnData, ...]) -> list[Connection]:
         conn_list: list[Connection] = []
-        for conn in connection_info:
+        for conn in conn_info:
             conn_from: str = conn[0]
             conn_to: str = conn[1]
             meta_dict: dict[str, str] = conn[2]
