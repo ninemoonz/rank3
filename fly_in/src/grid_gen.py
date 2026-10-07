@@ -20,9 +20,9 @@ class MapGen:
         return x_min, x_max, y_min, y_max
 
     def make_grid(self) -> list[list[tuple[int, int]]]:
-        grid: list[list[int]] = []
+        grid: list[list[tuple[int, int]]] = []
         for y in range(self.y_min, self.y_max + 1):
-            row_list: list[int] = []
+            row_list: list[tuple[int, int]] = []
             for x in range(self.x_min, self.x_max + 1):
                 grid_coord: tuple[int, int] = x, y
                 row_list.append(grid_coord)
