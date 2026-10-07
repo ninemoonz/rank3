@@ -1,13 +1,10 @@
 class Parser:
-    def __init__(self, file_name: str) -> None:
-        self.file_name: str = file_name
-        self.drones: str = ""
-
-    def file_opener(self) -> tuple[str, list[str], list[str]]:
+    @staticmethod
+    def file_opener(file_name: str) -> tuple[str, list[str], list[str]]:
         parsed_hubs: list[str] = []
         parsed_connections: list[str] = []
         try:
-            with open(self.file_name, "r") as f:
+            with open(file_name) as f:
                 for raw_line in f:
                     line = raw_line.strip()
                     if line == "" or line.startswith("#"):
@@ -17,27 +14,28 @@ class Parser:
                     key, value = line.split(":")
                     clean_key = key.strip()
                     if clean_key == "nb_drones":
-                        self.drones = value
+                        drones = value
                     elif clean_key in ("start_hub", "hub", "end_hub"):
                         raw_data: str = value
-                        parsed_hubs.append(clean_key)
-                        parsed_hubs.append(raw_data)
+                        parsed_hubs.append((clean_key, raw_data))
                     elif clean_key == "connection":
                         connection_data = value
                         parsed_connections.append(connection_data)
         except IOError as e:
             print(f"Cannot open file {e}")
-        return self.drones, parsed_hubs, parsed_connections
+        return drones, parsed_hubs, parsed_connections
 
-    def parse_drones(self) -> int:
+    @staticmethod
+    def parse_drones(drones: str) -> int:
         try:
-            int_drones = int(self.drones)
+            int_drones = int(drones)
             return int_drones
         except ValueError as e:
             print(e)
             return 0
 
-    def parse_hubs(self, hubs_data: list[str]) -> tuple[str, ...]:
+    @staticmethod
+    def parse_hubs(hubs_data: list[str]) -> tuple[str, ...]:
         return_hubs: list[str] = []
         for hub_type, raw_data in hubs_data:
             polished: list[str] = [hub_type]
@@ -63,7 +61,7 @@ class Parser:
                 continue
         return tuple(return_hubs)
 
-    def parse_connections(self, connection_data: list[str]) -> tuple[str, ...]:
+    def parse_connections(connection_data: list[str]) -> tuple[str, ...]:
         return_connections: list[str] = []
         for raw_data in connection_data:
             split_data = (raw_data.strip().replace(' ', '-')

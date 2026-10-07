@@ -6,28 +6,37 @@ from src import (Parser,
                  MapGen)
 
 
-def tester(val: int):
-    file_name = "./maps/medium/03_priority_puzzle.txt"
-    drones, raw_hubs, raw_connections = Parser.file_opener(file_name)
-    clean_drones = Parser(drones).parse_drones()
-    clean_hubs = Parser(raw_hubs).parse_hubs()
-    clean_conn = Parser(raw_connections).parse_connections()
-    if val == 0:
-        produced_hubs = HubsFactory().make_hubs(clean_hubs, clean_drones)
-        return produced_hubs
-    if val == 1:
-        produced_conn = ConnectionsFactory().make_connections(clean_conn)
-        return produced_conn
-    if val == 2:
-        produced_drones = DronesFactory().make_drones(clean_drones)
-        return produced_drones
+def parse_all(file_name: str) -> tuple[int, list[str], list[str]]:
+    drones, raw_hubs, raw_conn = Parser.file_opener(file_name)
+    clean_drones = Parser.parse_drones(drones)
+    clean_hubs = Parser.parse_hubs(raw_hubs)
+    clean_conn = Parser.parse_connections(raw_conn)
+    return clean_drones, clean_hubs, clean_conn
+
+
+def make_instance(parsed_drones: str,
+                  parsed_hubs: list[str],
+                  parsed_conns: list[str]) -> tuple[list["Drone"],
+                                                    list["Hub"],
+                                                    list["Connection"]]:
+    produced_drones = DronesFactory().make_drones(parsed_drones)
+    produced_hubs = HubsFactory().make_hubs(parsed_hubs, parsed_drones)
+    produced_conn = ConnectionsFactory().make_connections(parsed_conns)
+    return produced_drones, produced_hubs, produced_conn
 
 
 if __name__ == "__main__":
-    hub_list = tester(0)
-    conn_list = tester(1)
-    drone_list = tester(2)
-    map_gen = MapGen(hub_list)
+    file_name = "./maps/medium/03_priority_puzzle.txt"
+    parsed_drone, parsed_hub, parsed_conn = parse_all(file_name)
+    drones_list, hubs_list, conns_list = make_instance(parsed_drone,
+                                                       parsed_hub,
+                                                       parsed_conn)
+    for hub in hubs_list:
+        print(hub)
+    print()
+    for conn in conns_list:
+        print(conn)
+    map_gen = MapGen(hubs_list)
     new_map = map_gen.place_hubs()
-    rendered = RenderMap("priority_puzzle", hub_list, conn_list)
+    rendered = RenderMap("priority_puzzle", hubs_list, conns_list)
     rendered.render_map()
