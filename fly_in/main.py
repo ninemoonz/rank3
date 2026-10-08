@@ -1,10 +1,9 @@
 from typing import TYPE_CHECKING
-from render_test import RenderMap
 from src import (Parser,
                  HubsFactory,
                  ConnectionsFactory,
                  DronesFactory,
-                 MapGen)
+                 MapGen, RenderMap)
 
 if TYPE_CHECKING:
     from src import Drone, Hub, Connection
