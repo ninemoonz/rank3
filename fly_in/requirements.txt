@@ -1,2 +1,4 @@
 pydantic
 pygame-ce
+mypy
+flake8

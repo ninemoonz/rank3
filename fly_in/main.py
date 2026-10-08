@@ -1,3 +1,4 @@
+from graph_gen import Graph
 from typing import TYPE_CHECKING
 from src import (Parser,
                  HubsFactory,
@@ -29,13 +30,13 @@ def make_instance(parsed_drones: str,
 
 
 if __name__ == "__main__":
-    file_name = "./maps/easy/01_linear_path.txt"
+    file_name = "./maps/hard/01_maze_nightmare.txt"
     parsed_drone, parsed_hub, parsed_conn = parse_all(file_name)
     drones_list, hubs_list, conns_list = make_instance(parsed_drone,
                                                        parsed_hub,
                                                        parsed_conn)
-    map_gen = MapGen(hubs_list)
-    map_gen.describe()
-    # new_map = map_gen.place_hubs()
+    new_graph = Graph(hubs_list, conns_list)
+    for name in new_graph.link_to:
+        print(name, "->", [next_name for next_name, conns in new_graph.link_to[name]])
     # display_map = RenderMap(hubs_list, conns_list)
     # display_map.render_map()

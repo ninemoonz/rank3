@@ -11,14 +11,10 @@ class RenderMap:
         self.x_min, self.x_max, self.y_min, self.y_max = (MapGen(hub_list)
                                                           .calc_grid())
 
-    def extract_data(self) -> list[list[str, tuple[int, int], str]]:
-        hubs: list[list[str, tuple[int, int], str]] = []
+    def extract_data(self) -> list[tuple[str, tuple[int, int], str]]:
+        hubs: list[tuple[str, tuple[int, int], str]] = []
         for hub in self.hub_list:
-            data: list[str, tuple[int, int], str] = []
-            data.append(hub.name)
-            data.append(hub.coord)
-            data.append(hub.color)
-            hubs.append(data)
+            hubs.append((hub.name, hub.coord, hub.color or "white"))
         return hubs
 
     def coord_calibration(self,
