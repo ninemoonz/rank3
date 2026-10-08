@@ -4,7 +4,7 @@ from src import (Parser,
                  HubsFactory,
                  ConnectionsFactory,
                  DronesFactory,
-                 MapGen, RenderMap)
+                 RenderMap)
 
 if TYPE_CHECKING:
     from src import Drone, Hub, Connection
@@ -38,5 +38,5 @@ if __name__ == "__main__":
     new_graph = Graph(hubs_list, conns_list)
     for name in new_graph.link_to:
         print(name, "->", [next_name for next_name, conns in new_graph.link_to[name]])
-    # display_map = RenderMap(hubs_list, conns_list)
-    # display_map.render_map()
+    display_map = RenderMap(hubs_list, conns_list)
+    display_map.render_map()
