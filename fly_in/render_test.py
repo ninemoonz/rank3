@@ -4,10 +4,8 @@ from src import Hub, MapGen, Connection
 
 class RenderMap:
     def __init__(self,
-                 map_name: str,
                  hub_list: list[Hub],
                  conn_list: list[Connection]) -> None:
-        self.map_name = map_name
         self.hub_list = hub_list
         self.conn_list = conn_list
         self.x_min, self.x_max, self.y_min, self.y_max = (MapGen(hub_list)
@@ -42,7 +40,7 @@ class RenderMap:
             coord[hub[0]] = hub[1]
         pygame.init()
         screen = pygame.display.set_mode((width, height))
-        pygame.display.set_caption(f"Fly_in: {self.map_name}")
+        pygame.display.set_caption(f"Fly_in")
         clock = pygame.time.Clock()
         font = pygame.font.SysFont(None, 30)
         running = True

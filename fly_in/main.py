@@ -1,9 +1,13 @@
+from typing import TYPE_CHECKING
 from render_test import RenderMap
 from src import (Parser,
                  HubsFactory,
                  ConnectionsFactory,
                  DronesFactory,
                  MapGen)
+
+if TYPE_CHECKING:
+    from src import Drone, Hub, Connection
 
 
 def parse_all(file_name: str) -> tuple[int, list[str], list[str]]:
@@ -26,17 +30,12 @@ def make_instance(parsed_drones: str,
 
 
 if __name__ == "__main__":
-    file_name = "./maps/medium/03_priority_puzzle.txt"
+    file_name = "./maps/easy/01_linear_path.txt"
     parsed_drone, parsed_hub, parsed_conn = parse_all(file_name)
     drones_list, hubs_list, conns_list = make_instance(parsed_drone,
                                                        parsed_hub,
                                                        parsed_conn)
-    for hub in hubs_list:
-        print(hub)
-    print()
-    for conn in conns_list:
-        print(conn)
     map_gen = MapGen(hubs_list)
     new_map = map_gen.place_hubs()
-    rendered = RenderMap("priority_puzzle", hubs_list, conns_list)
+    rendered = RenderMap(hubs_list, conns_list)
     rendered.render_map()
