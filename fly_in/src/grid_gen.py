@@ -7,6 +7,10 @@ class MapGen:
         self.x_min, self.x_max, self.y_min, self.y_max = self.calc_grid()
         self.grid = self.make_grid()
 
+    def describe(self) -> None:
+        for hub in self.hubs:
+            print(hub.describe())
+
     def calc_grid(self) -> tuple[int, int, int, int]:
         x_list: list[int] = []
         y_list: list[int] = []

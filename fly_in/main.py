@@ -35,6 +35,7 @@ if __name__ == "__main__":
                                                        parsed_hub,
                                                        parsed_conn)
     map_gen = MapGen(hubs_list)
-    new_map = map_gen.place_hubs()
-    rendered = RenderMap(hubs_list, conns_list)
-    rendered.render_map()
+    map_gen.describe()
+    # new_map = map_gen.place_hubs()
+    # display_map = RenderMap(hubs_list, conns_list)
+    # display_map.render_map()
