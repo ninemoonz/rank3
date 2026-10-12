@@ -37,6 +37,9 @@ if __name__ == "__main__":
                                                        parsed_conn)
     new_graph = Graph(hubs_list, conns_list)
     for name in new_graph.link_to:
-        print(name, "->", [next_name for next_name, conns in new_graph.link_to[name]])
+        print(name, "->", [next_name for next_name,
+                           conns in new_graph.link_to[name]])
     display_map = RenderMap(hubs_list, conns_list)
     display_map.render_map()
+    for drone in drones_list:
+        print(drone)
