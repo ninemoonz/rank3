@@ -44,21 +44,21 @@ class RenderMap:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-            screen.fill((200, 200, 200))
+            screen.fill((0, 0, 0))
             # Between this as a hidden canvas before display
             for conn in self.conn_list:
                 start_pos = coord[conn.hub_from]
                 end_pos = coord[conn.hub_to]
                 pixel_start = self.coord_calibration(margin, cell, start_pos)
                 pixel_end = self.coord_calibration(margin, cell, end_pos)
-                pygame.draw.line(screen, (150, 150, 150),
+                pygame.draw.line(screen, (250, 250, 250),
                                  pixel_start, pixel_end, 30)
             for hub in hubs:
                 name = hub[0]
                 px, py = self.coord_calibration(margin, cell, hub[1])
                 color = hub[2]
                 pygame.draw.circle(screen, color, (px, py), 25)
-                label = font.render(name, True, (0, 0, 0))
+                label = font.render(name, True, (250, 250, 250))
                 screen.blit(label, (px - label.get_width() / 2, py + 30))
 
             # Between this as a hidden canvas before display
