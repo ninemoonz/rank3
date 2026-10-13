@@ -22,5 +22,5 @@ class PathFinder:
             print(current)
             for name, _ in self.graph_map.link_to[current]:
                 if name not in visited:
-                    visited.add(name)
                     queue.append(name)
+                    visited.add(name)
