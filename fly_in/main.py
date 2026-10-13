@@ -31,7 +31,7 @@ def make_instance(parsed_drones: str,
 
 
 if __name__ == "__main__":
-    file_name = "./maps/medium/01_dead_end_trap.txt"
+    file_name = "./maps/easy/02_simple_fork.txt"
     parsed_drone, parsed_hub, parsed_conn = parse_all(file_name)
     drones_list, hubs_list, conns_list = make_instance(parsed_drone,
                                                        parsed_hub,

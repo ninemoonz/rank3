@@ -17,6 +17,7 @@ class PathFinder:
     def path_bfs(self) -> None:
         queue = deque(["start"])
         visited = {"start"}
+        past_hub = {}
         while queue:
             current = queue.popleft()
             print(current)
@@ -24,3 +25,5 @@ class PathFinder:
                 if name not in visited:
                     queue.append(name)
                     visited.add(name)
+                    past_hub[name] = current
+        print(f"PARENTS: {past_hub}")
