@@ -27,3 +27,12 @@ class PathFinder:
                     visited.add(name)
                     past_hub[name] = current
         print(f"PARENTS: {past_hub}")
+        if "goal" not in visited:
+            return None
+        path = ["goal"]
+        node = "goal"
+        while node != "start":
+            node = past_hub[node]
+            path.append(node)
+        path.reverse()
+        print(path)
