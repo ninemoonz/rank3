@@ -15,7 +15,7 @@ class PathFinder:
         visited: set[str] = {"start"}
         past_hub: dict[str, str] = {}
         while queue:
-            current = queue.popleft()
+            current: str = queue.popleft()
             for name, _ in self.graph_map.link_to[current]:
                 if name not in visited:
                     queue.append(name)
