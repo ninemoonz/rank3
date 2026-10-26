@@ -37,7 +37,7 @@ if __name__ == "__main__":
                                                        parsed_hub,
                                                        parsed_conn)
     new_graph = Graph(hubs_list, conns_list)
-    # display_map = RenderMap(hubs_list, conns_list)
-    # display_map.render_map()
+    display_map = RenderMap(hubs_list, conns_list)
+    display_map.render_map()
     finder = PathFinder(new_graph, drones_list)
     finder.path_bfs()

@@ -11,9 +11,9 @@ class PathFinder:
         self.goal = graph_map.node["goal"]
 
     def path_bfs(self) -> None:
-        queue = deque(["start"])
-        visited = {"start"}
-        past_hub = {}
+        queue: deque[str] = deque(["start"])
+        visited: set[str] = {"start"}
+        past_hub: dict[str, str] = {}
         while queue:
             current = queue.popleft()
             for name, _ in self.graph_map.link_to[current]:
