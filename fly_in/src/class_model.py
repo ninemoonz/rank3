@@ -24,6 +24,7 @@ class Hub(BaseModel):
     color: Optional[str] = Field(default=None)
     max_drones: Optional[int] = Field(default=1)
     visited: bool = Field(default=False)
+    cost: int = Field(default=5)
 
     @model_validator(mode='after')
     def hub_validation(self) -> 'Hub':
