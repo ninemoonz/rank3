@@ -31,3 +31,27 @@ class PathFinder:
             path.append(node)
         path.reverse()
         return path
+
+    def cost_path(self) -> list[str]:
+        starting_hub = self.start
+        queue: deque[tuple[str, int]] = deque()
+        queue.append((starting_hub.name, starting_hub.cost))
+        visited: set[str] = {starting_hub}
+        past_hub: dict[str, str] = {}
+        while queue:
+            item = queue.popleft()
+            current, cost = item
+            for name, linked_hub in self.graph_map.link_to[current]:
+                if name not in visited:
+                    queue.append(name)
+                    visited.add(name)
+                    past_hub[name] = current
+        if "goal" not in visited:
+            return None
+        path = ["goal"]
+        node = "goal"
+        while node != "start":
+            node = past_hub[node]
+            path.append(node)
+        path.reverse()
+        return path

@@ -36,7 +36,7 @@ if __name__ == "__main__":
     drones_list, hubs_list, conns_list = make_instance(parsed_drone,
                                                        parsed_hub,
                                                        parsed_conn)
-    
+
     new_graph = Graph(hubs_list, conns_list)
     for hub in hubs_list:
         print(f"name: {hub.name} | zone: {hub.zone} | cost: {hub.cost}")
