@@ -10,42 +10,45 @@ class PathFinder:
         self.start = graph_map.node["start"]
         self.goal = graph_map.node["goal"]
 
-    def path_bfs(self) -> list[str]:
-        starting_hub = self.start.name
-        queue: deque[str] = deque([starting_hub])
-        visited: set[str] = {starting_hub}
-        past_hub: dict[str, str] = {}
-        while queue:
-            current: str = queue.popleft()
-            for name, linked_hub in self.graph_map.link_to[current]:
-                if name not in visited:
-                    queue.append(name)
-                    visited.add(name)
-                    past_hub[name] = current
-        if "goal" not in visited:
-            return None
-        path = ["goal"]
-        node = "goal"
-        while node != "start":
-            node = past_hub[node]
-            path.append(node)
-        path.reverse()
-        return path
+    # def path_bfs(self) -> list[str]:
+    #     starting_hub = self.start.name
+    #     queue: deque[str] = deque([starting_hub])
+    #     visited: set[str] = {starting_hub}
+    #     past_hub: dict[str, str] = {}
+    #     while queue:
+    #         current: str = queue.popleft()
+    #         for name, linked_hub in self.graph_map.link_to[current]:
+    #             if name not in visited:
+    #                 queue.append(name)
+    #                 visited.add(name)
+    #                 past_hub[name] = current
+    #     if "goal" not in visited:
+    #         return None
+    #     path = ["goal"]
+    #     node = "goal"
+    #     while node != "start":
+    #         node = past_hub[node]
+    #         path.append(node)
+    #     path.reverse()
+    #     return path
 
-    def cost_path(self) -> list[str]:
+    def cost_path(self) -> None:
         starting_hub = self.start
         queue: deque[tuple[str, int]] = deque()
         queue.append((starting_hub.name, starting_hub.cost))
-        visited: set[str] = {starting_hub}
+        cost_sum: dict[str, int] = {}
+        cost_sum[starting_hub.name] = starting_hub.cost
+        visited: set[str] = {starting_hub.name}
         past_hub: dict[str, str] = {}
         while queue:
             item = queue.popleft()
-            current, cost = item
-            for name, linked_hub in self.graph_map.link_to[current]:
+            current, hub_cost = item
+            for name, conn in self.graph_map.link_to[current]:
                 if name not in visited:
-                    queue.append(name)
+                    queue.append((name, self.graph_map.node[name].cost))
                     visited.add(name)
                     past_hub[name] = current
+                    print(f"{name, self.graph_map.node[name].cost}")
         if "goal" not in visited:
             return None
         path = ["goal"]
@@ -54,4 +57,3 @@ class PathFinder:
             node = past_hub[node]
             path.append(node)
         path.reverse()
-        return path

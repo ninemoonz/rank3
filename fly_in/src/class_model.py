@@ -20,9 +20,9 @@ class Hub(BaseModel):
     hub_type: str = Field(min_length=1)
     name: str = Field(min_length=1)
     coord: tuple[int, int]
-    zone: Optional[str] = Field(default="normal")
-    color: Optional[str] = Field(default=None)
-    max_drones: Optional[int] = Field(default=1)
+    zone: str = Field(default="normal")
+    color: str = Field(default=None)
+    max_drones: int = Field(default=1)
     visited: bool = Field(default=False)
     cost: int = Field(default=5)
 
