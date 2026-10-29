@@ -31,18 +31,15 @@ def make_instance(parsed_drones: str,
 
 
 if __name__ == "__main__":
-    file_name = "./maps/hard/03_ultimate_challenge.txt"
+    file_name = "./maps/medium/02_circular_loop.txt"
     parsed_drone, parsed_hub, parsed_conn = parse_all(file_name)
     drones_list, hubs_list, conns_list = make_instance(parsed_drone,
                                                        parsed_hub,
                                                        parsed_conn)
 
     new_graph = Graph(hubs_list, conns_list)
-    for hub in hubs_list:
-        print(f"name: {hub.name} | zone: {hub.zone} | cost: {hub.cost}")
-
     # display_map = RenderMap(hubs_list, conns_list)
     # display_map.render_map()
-    # finder = PathFinder(new_graph, drones_list)
-    # shortest: list[str] = finder.path_bfs()
+    finder = PathFinder(new_graph, drones_list)
+    shortest: list[str] = finder.cost_path()
     # print(f"Shortest path: {shortest}")

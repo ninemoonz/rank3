@@ -34,20 +34,22 @@ class PathFinder:
 
     def cost_path(self) -> list[str]:
         starting_hub = self.start
+        
         queue: deque[tuple[str, int]] = deque()
         queue.append((starting_hub.name, starting_hub.cost))
-        visited: set[str] = {starting_hub}
         past_hub: dict[str, str] = {}
+        cost_list: dict[str, int]= {}
+        cost_list[starting_hub.name] = 0
         while queue:
             item = queue.popleft()
             current, cost = item
-            for name, linked_hub in self.graph_map.link_to[current]:
-                if name not in visited:
-                    queue.append(name)
-                    visited.add(name)
-                    past_hub[name] = current
-        if "goal" not in visited:
-            return None
+            for next, _ in self.graph_map.link_to[current]:
+                new_cost = cost + self.graph_map.node[next].cost
+                if next not in cost_list or new_cost < cost_list[next]:
+                    cost_list[next] = new_cost
+                    queue.append((next, new_cost))
+                    past_hub[next] = current
+                turn += 1
         path = ["goal"]
         node = "goal"
         while node != "start":

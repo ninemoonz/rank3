@@ -27,10 +27,12 @@ class HubsFactory:
                                           **meta_dict})
             if hub_type in ("start_hub", "end_hub"):
                 new_hub.max_drones = drones
-            if new_hub.zone == "priority":
-                new_hub.cost = 1
+            if new_hub.zone == "start" or new_hub.zone == "goal":
+                new_hub.cost = 0
+            elif new_hub.zone == "priority":
+                new_hub.cost = 0
             elif new_hub.zone == "restricted":
-                new_hub.cost = 100
+                new_hub.cost = 10
             hub_list.append(new_hub)
         return hub_list
 
