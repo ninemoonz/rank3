@@ -1,3 +1,5 @@
+from heapq import heapify, heappop, heappush
+
 graph = {
    "A": {"B": 3, "C": 3},
    "B": {"A": 3, "D": 3.5, "E": 2.8},
@@ -17,8 +19,21 @@ class Graph:
 			self.graph[node1] = {}
 		self.graph[node1][node2] = weight
 
+	def shortest_distances(self, source: str) -> dict[str, float]:
+		# Initialize the values of all nodes with inf
+		distances = {node: float("inf") for node in self.graph}
+		distances[source] = 0
+
+		pq = [(0, source)]
+		heapify(pq)
+
+		visited = set()
+		return distances
+
 
 if __name__ == "__main__":
-	G = Graph(graph=graph)
-	for name in G.graph:
-		print(name)
+	G = Graph(graph)
+
+	distances = G.shortest_distances("B")
+	to_F = distances["F"]
+	print(f"The shortest distance from B to F is {to_F}")
