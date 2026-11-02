@@ -48,17 +48,6 @@ class PathFinder:
         cost_list[starting_hub.name] = 0
         while queue:
             item = queue.popleft()
-<<<<<<< HEAD
-            current, hub_cost = item
-            for name, conn in self.graph_map.link_to[current]:
-                if name not in visited:
-                    queue.append((name, self.graph_map.node[name].cost))
-                    visited.add(name)
-                    past_hub[name] = current
-                    print(f"{name, self.graph_map.node[name].cost}")
-        if "goal" not in visited:
-            return None
-=======
             current, cost = item
             for next, _ in self.graph_map.link_to[current]:
                 new_cost = cost + self.graph_map.node[next].cost
@@ -67,7 +56,6 @@ class PathFinder:
                     queue.append((next, new_cost))
                     past_hub[next] = current
                 turn += 1
->>>>>>> fff664ea61d39948ae60b12dd9030ca9a9e85826
         path = ["goal"]
         node = "goal"
         while node != "start":
