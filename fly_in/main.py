@@ -42,7 +42,4 @@ if __name__ == "__main__":
     # display_map.render_map()
     finder = PathFinder(new_graph, drones_list)
     shortest: list[str] = finder.cost_path()
-<<<<<<< HEAD
-=======
-    # print(f"Shortest path: {shortest}")
->>>>>>> fff664ea61d39948ae60b12dd9030ca9a9e85826
+    print(f"Shortest path: {shortest}")

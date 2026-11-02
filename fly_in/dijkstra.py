@@ -10,30 +10,39 @@ graph = {
    "G": {"F": 2.5, "E": 7, "D": 10},
 }
 
+
 class Graph:
-	def __init__(self, graph: dict[str, dict[str, int]]):
-		self.graph = graph
+    def __init__(self, graph: dict[str, dict[str, int]]):
+        self.graph = graph
 
-	def add_edge(self, node1, node2, weight):
-		if node1 not in self.graph:
-			self.graph[node1] = {}
-		self.graph[node1][node2] = weight
+    def add_edge(self, node1, node2, weight):
+        if node1 not in self.graph:
+            self.graph[node1] = {}
+        self.graph[node1][node2] = weight
 
-	def shortest_distances(self, source: str) -> dict[str, float]:
-		# Initialize the values of all nodes with inf
-		distances = {node: float("inf") for node in self.graph}
-		distances[source] = 0
+    def shortest_distances(self, source: str) -> dict[str, float]:
+        # Initialize the values of all nodes with infinity
+        distances = {node: float("inf") for node in self.graph}
+        distances[source] = 0
 
-		pq = [(0, source)]
-		heapify(pq)
+        # initialize a priority queue
+        pq = [(0, source)]
+        heapify(pq)
 
-		visited = set()
-		return distances
+        # Create a set to hold visted nodes
+        visited = set()
+
+        while pq:
+            current_distance, current_node = heappop(pq)
+            if current_node in visited:
+                continue  # Skip already visited nodes
+            visited.add(current_node)
+        return distances
 
 
 if __name__ == "__main__":
-	G = Graph(graph)
+    G = Graph(graph)
 
-	distances = G.shortest_distances("B")
-	to_F = distances["F"]
-	print(f"The shortest distance from B to F is {to_F}")
+    distances = G.shortest_distances("B")
+    to_F = distances["F"]
+    print(f"The shortest distance from B to F is {to_F}")

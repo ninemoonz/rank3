@@ -37,15 +37,13 @@ class PathFinder:
         
         queue: deque[tuple[str, int]] = deque()
         queue.append((starting_hub.name, starting_hub.cost))
-<<<<<<< HEAD
         cost_sum: dict[str, int] = {}
         cost_sum[starting_hub.name] = starting_hub.cost
         visited: set[str] = {starting_hub.name}
-=======
->>>>>>> fff664ea61d39948ae60b12dd9030ca9a9e85826
         past_hub: dict[str, str] = {}
-        cost_list: dict[str, int]= {}
+        cost_list: dict[str, int] = {}
         cost_list[starting_hub.name] = 0
+        turn: int = 0
         while queue:
             item = queue.popleft()
             current, cost = item
@@ -62,3 +60,4 @@ class PathFinder:
             node = past_hub[node]
             path.append(node)
         path.reverse()
+        return (path)
