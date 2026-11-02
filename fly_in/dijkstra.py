@@ -20,7 +20,7 @@ class Graph:
             self.graph[node1] = {}
         self.graph[node1][node2] = weight
 
-    def shortest_distances(self, source: str) -> dict[str, float]:
+    def shortest_distances(self, source: str, target: str) -> dict[str, float]:
         # Initialize the values of all nodes with infinity
         distances = {node: float("inf") for node in self.graph}
         distances[source] = 0
@@ -40,18 +40,29 @@ class Graph:
             visited.add(current_node)
 
             for neighbor, weight in self.graph[current_node].items():
-                print(f"neighbor: {neighbor} | weight: {weight}")
                 distance_so_far = current_distance + weight
                 if distance_so_far < distances[neighbor]:
                     distances[neighbor] = distance_so_far
                     heappush(pq, (distance_so_far, neighbor))
+        predecessors = {node: None for node in self.graph}
 
-        return distances
+        for node, distance in distances.items():
+            for neighbor, weight in self.graph[node].items():
+                if distances[neighbor] == distance + weight:
+                    predecessors[neighbor] = node
+
+        path = []
+        current_node = target
+
+        while current_node:
+            path.append(current_node)
+            current_node = predecessors[current_node]
+        path.reverse()
+        return path
 
 
 if __name__ == "__main__":
     G = Graph(graph)
 
-    distances = G.shortest_distances("B")
-    to_F = distances["F"]
-    print(f"The shortest distance from B to F is {to_F}")
+    path = G.shortest_distances("D", "G")
+    print(f"Shortest Path: {path}")
