@@ -34,9 +34,18 @@ class Graph:
 
         while pq:
             current_distance, current_node = heappop(pq)
+
             if current_node in visited:
                 continue  # Skip already visited nodes
             visited.add(current_node)
+
+            for neighbor, weight in self.graph[current_node].items():
+                print(f"neighbor: {neighbor} | weight: {weight}")
+                distance_so_far = current_distance + weight
+                if distance_so_far < distances[neighbor]:
+                    distances[neighbor] = distance_so_far
+                    heappush(pq, (distance_so_far, neighbor))
+
         return distances
 
 
