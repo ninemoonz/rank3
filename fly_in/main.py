@@ -6,6 +6,7 @@ from src import (Parser,
                  ConnectionsFactory,
                  DronesFactory,
                  RenderMap)
+from new_dijkstra import Dijkstra
 
 if TYPE_CHECKING:
     from src import Drone, Hub, Connection
@@ -39,7 +40,8 @@ if __name__ == "__main__":
 
     new_graph = Graph(hubs_list, conns_list)
     # display_map = RenderMap(hubs_list, conns_list)
-    # display_map.render_map()
-    finder = PathFinder(new_graph, drones_list)
-    shortest: list[str] = finder.cost_path()
-    print(f"Shortest path: {shortest}")
+    # # display_map.render_map()
+    # finder = PathFinder(new_graph, drones_list)
+    # shortest: list[str] = finder.cost_path()
+    D = Dijkstra(new_graph)
+    shortest = D.shortest_distances("start", "goal")
