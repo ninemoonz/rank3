@@ -1,11 +1,14 @@
+import sys
 from graph_gen import Graph
 from new_dijkstra import Dijkstra
 from typing import TYPE_CHECKING
+from src.config_parsing import ParseError
 from src import (Parser,
                  HubsFactory,
                  ConnectionsFactory,
                  DronesFactory,
                  RenderMap)
+
 
 if TYPE_CHECKING:
     from src import Drone, Hub, Connection
@@ -32,10 +35,15 @@ def make_instance(parsed_drones: str,
 
 if __name__ == "__main__":
     file_name = "./maps/hard/01_maze_nightmare.txt"
-    parsed_drone, parsed_hub, parsed_conn = parse_all(file_name)
+    try:
+        parsed_drone, parsed_hub, parsed_conn = parse_all(file_name)
+    except ParseError as e:
+        print(f"[Error] {e}", file=sys.stderr)
+        sys.exit(1)
     drones_list, hubs_list, conns_list = make_instance(parsed_drone,
                                                        parsed_hub,
                                                        parsed_conn)
+
     new_graph = Graph(hubs_list, conns_list)
     D = Dijkstra(new_graph)
     shortest = D.shortest_distances()

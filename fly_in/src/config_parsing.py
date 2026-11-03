@@ -1,6 +1,14 @@
-RawHub = tuple[str, str]
-HubData = tuple[str, str, tuple[int, int], dict[str, str]]
-ConnData = tuple[str, str, dict[str, str]]
+RawHub = tuple[str, str, int]
+RawConn = tuple[str, int]
+HubData = tuple[str, str, tuple[int, int], dict[str, str], int]
+ConnData = tuple[str, str, dict[str, str], int]
+
+
+class ParseError(Exception):
+    def __init__(self, line_no: int, msg: str) -> None:
+        super().__init__(f"Line {line_no}: {msg}")
+        self.line_no = line_no
+        self.msg = msg
 
 
 class Parser:
@@ -8,25 +16,35 @@ class Parser:
     def file_opener(file_name: str) -> tuple[str, list[RawHub], list[str]]:
         parsed_hubs: list[RawHub] = []
         parsed_connections: list[str] = []
-        drones: str = "0"
+        drones: int = 0
+        first_line: bool = True
         try:
             with open(file_name) as f:
-                for raw_line in f:
+                for line_no, raw_line in enumerate(f, start=1):
                     line = raw_line.strip()
                     if line == "" or line.startswith("#"):
                         continue
                     if ":" not in line:
-                        raise Exception("nothing to parse")
-                    key, value = line.split(":")
+                        raise ParseError(line_no, f"missing ':' in '{line}'")
+                    key, value = line.split(":", 1)
                     clean_key = key.strip()
-                    if clean_key == "nb_drones":
+
+                    if first_line:
+                        if clean_key != "nb_drones":
+                            raise ParseError(line_no, "first line must be "
+                                             "'nb_drones: <n>'")
+                        first_line = False
                         drones = value
+                        drones_int = int(drones)
+                        if drones_int < 0:
+                            raise ParseError(line_no, "Drones cannot be "
+                                             f"negative number: {drones_int}")
                     elif clean_key in ("start_hub", "hub", "end_hub"):
                         raw_data: str = value
-                        parsed_hubs.append((clean_key, raw_data))
+                        parsed_hubs.append((clean_key, raw_data, line_no))
                     elif clean_key == "connection":
                         connection_data = value
-                        parsed_connections.append(connection_data)
+                        parsed_connections.append((connection_data, line_no))
         except IOError as e:
             print(f"Cannot open file {e}")
         return drones, parsed_hubs, parsed_connections
