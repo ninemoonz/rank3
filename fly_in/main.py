@@ -34,7 +34,7 @@ def make_instance(parsed_drones: str,
 
 
 if __name__ == "__main__":
-    file_name = "./maps/challenger/01_the_impossible_dream.txt"
+    file_name = "./maps/medium/02_circular_loop.txt"
     try:
         parsed_drone, parsed_hub, parsed_conn = parse_all(file_name)
     except ParseError as e:

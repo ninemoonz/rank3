@@ -67,21 +67,30 @@ class Parser:
     def parse_hubs(hubs_data: list[RawHub]) -> tuple[HubData, ...]:
         return_hubs: list[HubData] = []
         for hub_type, raw_data, line_no in hubs_data:
-            hub_data_split = raw_data.strip().split(' ', maxsplit=3)
-            if hub_data_split[0]:
-                name: str = hub_data_split[0]
-            if hub_data_split[1] and hub_data_split[2]:
-                try:
-                    coord: tuple[int, int] = (int(hub_data_split[1]),
-                                              int(hub_data_split[2]))
-                except ValueError as e:
-                    print(e)
-                    continue
+            hub_data_split = raw_data.split(maxsplit=3)
+            if len(hub_data_split) < 3:
+                raise ParseError(line_no, "Expected '<name> <x> <y> "
+                                 "[metadata]'")
+            name: str = hub_data_split[0]
+            try:
+                coord: tuple[int, int] = (int(hub_data_split[1]),
+                                          int(hub_data_split[2]))
+            except ValueError:
+                raise ParseError(line_no, "Coordinate must be integers: "
+                                 f"{hub_data_split[1]} "
+                                 f"{hub_data_split[2]}")
+
             meta_list: dict[str, str] = {}
             if len(hub_data_split) > 3:
-                meta_split = hub_data_split[3].strip('[]').split(' ')
-                for data in meta_split:
-                    key, value = data.strip().split('=')
+                meta = hub_data_split[3]
+                if not (meta.startswith('[') and meta.endswith(']')):
+                    raise ParseError(line_no, f"Invalid metadata: {meta}")
+                for tag in meta[1:-1].split():
+                    if tag.count('=') != 1:
+                        ParseError(line_no, f"Invalid tag: '{tag}")
+                    key, value = tag.split('=')
+                    if key not in ("zone", "color", "max_drones"):
+                        ParseError(line_no, f"unknown tag: '{key}'")
                     meta_list[key] = value
             return_hubs.append((hub_type, name, coord, meta_list, line_no))
         return tuple(return_hubs)
