@@ -13,7 +13,9 @@ class ParseError(Exception):
 
 class Parser:
     @staticmethod
-    def file_opener(file_name: str) -> tuple[tuple[str, int], list[RawHub], list[RawConn]]:
+    def file_opener(file_name: str) -> tuple[tuple[str, int],
+                                             list[RawHub],
+                                             list[RawConn]]:
         parsed_hubs: list[RawHub] = []
         parsed_connections: list[RawConn] = []
         parsed_drones: tuple[str, int] = ("0", 0)
