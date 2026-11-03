@@ -6,12 +6,14 @@ class Dijkstra:
     def __init__(self, graph: Graph):
         self.graph = graph
 
-    def add_edge(self, node1, node2, weight):
-        if node1 not in self.graph:
-            self.graph[node1] = {}
-        self.graph[node1][node2] = weight
+    # def add_edge(self, node1, node2, weight):
+    #     if node1 not in self.graph:
+    #         self.graph[node1] = {}
+    #     self.graph[node1][node2] = weight
 
-    def shortest_distances(self, source: str, target: str) -> dict[str, float]:
+    def shortest_distances(self,
+                           source: str = "start",
+                           target: str = "goal") -> dict[str, float]:
         # Initialize the values of all nodes with infinity
         distances = {node: float("inf") for node in self.graph.node}
         distances[source] = 0
