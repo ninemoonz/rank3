@@ -3,17 +3,12 @@ from graph_gen import Graph
 
 
 class Dijkstra:
-    def __init__(self, graph: Graph):
+    def __init__(self, graph: Graph) -> None:
         self.graph = graph.nodes
 
-    # def add_edge(self, node1, node2, weight):
-    #     if node1 not in self.graph:
-    #         self.graph[node1] = {}
-    #     self.graph[node1][node2] = weight
     def shortest_distances(self,
                            source: str = "start",
-                           target: str = "goal") -> dict[str, float]:
-        print(f"SELF.GRAPH: {self.graph}")
+                           target: str = "goal") -> list[str]:
         # Initialize the values of all nodes with infinity
         distances: dict[str, int] = {}
         for node in self.graph:

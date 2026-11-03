@@ -1,12 +1,11 @@
-from pathfinding_test import PathFinder
 from graph_gen import Graph
+from new_dijkstra import Dijkstra
 from typing import TYPE_CHECKING
 from src import (Parser,
                  HubsFactory,
                  ConnectionsFactory,
                  DronesFactory,
                  RenderMap)
-from new_dijkstra import Dijkstra
 
 if TYPE_CHECKING:
     from src import Drone, Hub, Connection
@@ -32,7 +31,7 @@ def make_instance(parsed_drones: str,
 
 
 if __name__ == "__main__":
-    file_name = "./maps/medium/01_dead_end_trap.txt"
+    file_name = "./maps/hard/01_maze_nightmare.txt"
     parsed_drone, parsed_hub, parsed_conn = parse_all(file_name)
     drones_list, hubs_list, conns_list = make_instance(parsed_drone,
                                                        parsed_hub,
@@ -43,5 +42,3 @@ if __name__ == "__main__":
     print(f"shortest path: {shortest}")
     display_map = RenderMap(hubs_list, conns_list)
     display_map.render_map()
-    # finder = PathFinder(new_graph, drones_list)
-    # shortest: list[str] = finder.cost_path()

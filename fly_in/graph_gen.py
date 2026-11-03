@@ -18,9 +18,6 @@ class Graph:
                 if node.name == conn.hub_from:
                     inner[conn.hub_to] = cost[conn.hub_to]
             self.nodes[node.name] = inner
-        print("[GRAPH]")
-        for element in self.nodes:
-            print(f"Key: {element} | Value: {self.nodes[element]}")
 
         # for hub in hub_list:
         #     self.node[hub.name] = hub
