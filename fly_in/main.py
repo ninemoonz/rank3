@@ -32,16 +32,16 @@ def make_instance(parsed_drones: str,
 
 
 if __name__ == "__main__":
-    file_name = "./maps/easy/01_linear_path.txt"
+    file_name = "./maps/medium/01_dead_end_trap.txt"
     parsed_drone, parsed_hub, parsed_conn = parse_all(file_name)
     drones_list, hubs_list, conns_list = make_instance(parsed_drone,
                                                        parsed_hub,
                                                        parsed_conn)
-
     new_graph = Graph(hubs_list, conns_list)
-    # display_map = RenderMap(hubs_list, conns_list)
-    # # display_map.render_map()
-    # finder = PathFinder(new_graph, drones_list)
-    # shortest: list[str] = finder.cost_path()
     D = Dijkstra(new_graph)
     shortest = D.shortest_distances()
+    print(f"shortest path: {shortest}")
+    display_map = RenderMap(hubs_list, conns_list)
+    display_map.render_map()
+    # finder = PathFinder(new_graph, drones_list)
+    # shortest: list[str] = finder.cost_path()

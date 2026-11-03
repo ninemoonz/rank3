@@ -6,7 +6,7 @@ class Graph:
                  conn_list: list[Connection]) -> None:
         # self.node: dict[str, str] = {}
         # self.link_to: dict[str, list[tuple[str, Connection]]] = {}
-        self.graph: dict[str, dict[str, int]] = {}
+        self.nodes: dict[str, dict[str, int]] = {}
 
         cost: dict[str, int] = {}
         for node in hub_list:
@@ -17,10 +17,10 @@ class Graph:
             for conn in conn_list:
                 if node.name == conn.hub_from:
                     inner[conn.hub_to] = cost[conn.hub_to]
-            self.graph[node.name] = inner
+            self.nodes[node.name] = inner
         print("[GRAPH]")
-        for element in self.graph:
-            print(f"Key: {element} | Value: {self.graph[element]}")
+        for element in self.nodes:
+            print(f"Key: {element} | Value: {self.nodes[element]}")
 
         # for hub in hub_list:
         #     self.node[hub.name] = hub
