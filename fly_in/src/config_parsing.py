@@ -13,10 +13,10 @@ class ParseError(Exception):
 
 class Parser:
     @staticmethod
-    def file_opener(file_name: str) -> tuple[str, list[RawHub], list[str]]:
+    def file_opener(file_name: str) -> tuple[tuple[str, int], list[RawHub], list[RawConn]]:
         parsed_hubs: list[RawHub] = []
-        parsed_connections: list[str] = []
-        drones: int = 0
+        parsed_connections: list[RawConn] = []
+        parsed_drones: tuple[str, int] = ("0", 0)
         first_line: bool = True
         try:
             with open(file_name) as f:
@@ -34,34 +34,39 @@ class Parser:
                             raise ParseError(line_no, "first line must be "
                                              "'nb_drones: <n>'")
                         first_line = False
-                        drones = value
-                        drones_int = int(drones)
-                        if drones_int < 0:
-                            raise ParseError(line_no, "Drones cannot be "
-                                             f"negative number: {drones_int}")
+                        parsed_drones = value, line_no
+                    elif clean_key == "nb_drones":
+                        raise ParseError(line_no, "nb_drones defined twice")
                     elif clean_key in ("start_hub", "hub", "end_hub"):
                         raw_data: str = value
                         parsed_hubs.append((clean_key, raw_data, line_no))
                     elif clean_key == "connection":
                         connection_data = value
                         parsed_connections.append((connection_data, line_no))
+                    else:
+                        raise ParseError(line_no, f"unknown key '{clean_key}'")
+            if first_line:
+                raise ParseError(0, "File is empty")
         except IOError as e:
-            print(f"Cannot open file {e}")
-        return drones, parsed_hubs, parsed_connections
+            raise ParseError(0, f"Cannot open file: {e}")
+        return parsed_drones, parsed_hubs, parsed_connections
 
     @staticmethod
-    def parse_drones(drones: str) -> int:
+    def parse_drones(drones: str, line_no: int) -> int:
         try:
             int_drones = int(drones)
-            return int_drones
-        except ValueError as e:
-            print(e)
-            return 0
+        except ValueError:
+            raise ParseError(line_no, "nb_drones must be an int: "
+                             f"'{drones.strip()}'")
+        if int_drones <= 0:
+            raise ParseError(line_no, "Drones cannot be "
+                             f"negative number: {int_drones}")
+        return int_drones
 
     @staticmethod
     def parse_hubs(hubs_data: list[RawHub]) -> tuple[HubData, ...]:
         return_hubs: list[HubData] = []
-        for hub_type, raw_data in hubs_data:
+        for hub_type, raw_data, line_no in hubs_data:
             hub_data_split = raw_data.strip().split(' ', maxsplit=3)
             if hub_data_split[0]:
                 name: str = hub_data_split[0]
@@ -78,13 +83,14 @@ class Parser:
                 for data in meta_split:
                     key, value = data.strip().split('=')
                     meta_list[key] = value
-                return_hubs.append((hub_type, name, coord, meta_list))
+            return_hubs.append((hub_type, name, coord, meta_list, line_no))
         return tuple(return_hubs)
 
     @staticmethod
-    def parse_connections(connection_data: list[str]) -> tuple[ConnData, ...]:
+    def parse_connections(connection_data: list[RawConn]) -> tuple[ConnData,
+                                                                   ...]:
         return_connections: list[ConnData] = []
-        for raw_data in connection_data:
+        for raw_data, line_no in connection_data:
             split_data = (raw_data.strip().replace(' ', '-')
                           .split('-', maxsplit=2))
             hub_from: str = split_data[0]
@@ -95,5 +101,5 @@ class Parser:
                 for data in meta_split:
                     key, value = data.strip().split('=')
                     meta_list[key] = value
-            return_connections.append((hub_from, hub_to, meta_list))
+            return_connections.append((hub_from, hub_to, meta_list, line_no))
         return tuple(return_connections)

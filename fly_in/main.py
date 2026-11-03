@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 def parse_all(file_name: str) -> tuple[int, list[str], list[str]]:
     drones, raw_hubs, raw_conn = Parser.file_opener(file_name)
-    clean_drones = Parser.parse_drones(drones)
+    clean_drones = Parser.parse_drones(drones[0], drones[1])
     clean_hubs = Parser.parse_hubs(raw_hubs)
     clean_conn = Parser.parse_connections(raw_conn)
     return clean_drones, clean_hubs, clean_conn
@@ -34,7 +34,7 @@ def make_instance(parsed_drones: str,
 
 
 if __name__ == "__main__":
-    file_name = "./maps/hard/01_maze_nightmare.txt"
+    file_name = "./maps/challenger/01_the_impossible_dream.txt"
     try:
         parsed_drone, parsed_hub, parsed_conn = parse_all(file_name)
     except ParseError as e:
