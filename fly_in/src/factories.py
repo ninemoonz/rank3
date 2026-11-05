@@ -1,5 +1,6 @@
 from .class_model import Drone, Hub, Connection
-from .config_parsing import HubData, ConnData
+from .config_parsing import HubData, ConnData, ParseError
+from pydantic import ValidationError
 
 
 class DronesFactory:
@@ -30,7 +31,7 @@ class HubsFactory:
             if new_hub.name == "start" or new_hub.name == "goal":
                 new_hub.cost = 0
             elif new_hub.zone == "priority":
-                new_hub.cost = 0
+                new_hub.cost = 1
             elif new_hub.zone == "restricted":
                 new_hub.cost = 10
             hub_list.append(new_hub)

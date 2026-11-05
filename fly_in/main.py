@@ -1,8 +1,9 @@
 import sys
+from pydantic import ValidationError
 from graph_gen import Graph
 from new_dijkstra import Dijkstra
 from typing import TYPE_CHECKING
-from src.config_parsing import ParseError
+from src.config_parsing import ParseError, HubData, ConnData
 from src import (Parser,
                  HubsFactory,
                  ConnectionsFactory,
@@ -15,7 +16,9 @@ if TYPE_CHECKING:
     from src import Drone, Hub, Connection
 
 
-def parse_all(file_name: str) -> tuple[int, list[str], list[str]]:
+def parse_all(file_name: str) -> tuple[int,
+                                       tuple[HubData, ...],
+                                       tuple[ConnData, ...]]:
     drones, raw_hubs, raw_conn = Parser.file_opener(file_name)
     clean_drones = Parser.parse_drones(drones[0], drones[1])
     clean_hubs = Parser.parse_hubs(raw_hubs)
@@ -23,18 +26,18 @@ def parse_all(file_name: str) -> tuple[int, list[str], list[str]]:
     return clean_drones, clean_hubs, clean_conn
 
 
-def run_factory(parsed_drones: str,
-                parsed_hubs: list[str],
-                parsed_conns: list[str]) -> tuple[list["Drone"],
-                                                  list["Hub"],
-                                                  list["Connection"]]:
+def run_factory(
+        parsed_drones: int,
+        parsed_hubs: tuple[HubData, ...],
+        parsed_conns: tuple[ConnData, ...]
+        ) -> tuple[list["Drone"], list["Hub"], list["Connection"]]:
     produced_drones = DronesFactory().make_drones(parsed_drones)
     produced_hubs = HubsFactory().make_hubs(parsed_hubs, parsed_drones)
     produced_conn = ConnectionsFactory().make_connections(parsed_conns)
     return produced_drones, produced_hubs, produced_conn
 
 
-def validation(parsed_hub) -> None:
+def validation(parsed_hub: tuple[HubData, ...]) -> None:
     hubs_validator = Validator(parsed_hub)
     hubs_validator.is_unique()
     hubs_validator.unique_zone()
@@ -47,13 +50,12 @@ if __name__ == "__main__":
     try:
         parsed_drone, parsed_hub, parsed_conn = parse_all(file_name)
         validation(parsed_hub)
-    except ParseError as e:
+        drones_list, hubs_list, conns_list = run_factory(parsed_drone,
+                                                         parsed_hub,
+                                                         parsed_conn)
+    except (ParseError, ValidationError) as e:
         print(f"[Error] {e}", file=sys.stderr)
         sys.exit(1)
-
-    drones_list, hubs_list, conns_list = run_factory(parsed_drone,
-                                                     parsed_hub,
-                                                     parsed_conn)
 
     # new_graph = Graph(hubs_list, conns_list)
     # D = Dijkstra(new_graph)

@@ -1,8 +1,8 @@
-from src.config_parsing import ParseError
+from src.config_parsing import ParseError, HubData
 
 
 class Validator:
-    def __init__(self, parsed_hubs: list[str]) -> None:
+    def __init__(self, parsed_hubs: tuple[HubData, ...]) -> None:
         self.parsed_hubs = parsed_hubs
 
     def is_unique(self) -> None:
@@ -10,19 +10,26 @@ class Validator:
         for hub in self.parsed_hubs:
             hub_names.append(hub[1])
             if not len(hub_names) == len(set(hub_names)):
-                raise ParseError(hub[-1], f"Duplicated name detected '{hub[1]}'")
+                raise ParseError(hub[-1], "Duplicated name "
+                                 f"detected '{hub[1]}'")
 
     def unique_zone(self) -> None:
-        zone_type: list[str] = []
+        start_count: int = 0
+        end_count: int = 0
         for zone in self.parsed_hubs:
-            print(f"zone: {zone[0]}")
-            zone_type.append(zone[0])
-        if (not zone_type.count("start_hub") == 1 or
-           "start_hub" not in zone_type):
-            raise ParseError(zone[-1], "There are more than one 'start_hub'"
-                             " or none. Pleaes check config file.")
-        elif (not zone_type.count("end_hub") == 1 or
-              "end_hub" not in zone_type):
-            raise ParseError(zone[-1], "There are more than one 'end_hub'"
-                             " or none. Pleaes check config file.")
-        print(f"zone type: {zone_type}")
+            if zone[0] == "start_hub":
+                start_count += 1
+                if start_count > 1:
+                    raise ParseError(zone[-1], "More than one "
+                                     "zone type 'start_hub' detected.")
+            elif zone[0] == "end_hub":
+                end_count += 1
+                if end_count > 1:
+                    raise ParseError(zone[-1], "More than one "
+                                     "zone type 'end_hub' detected.")
+        if start_count == 0:
+            raise ParseError(0, "No 'start_hub' found. "
+                             "Check config file")
+        if end_count == 0:
+            raise ParseError(0, "No 'end_hub' found. "
+                             "Check config file")
