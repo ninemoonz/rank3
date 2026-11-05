@@ -18,7 +18,7 @@ class Parser:
                                              list[RawConn]]:
         parsed_hubs: list[RawHub] = []
         parsed_connections: list[RawConn] = []
-        parsed_drones: tuple[str, int] = ("0", 0)
+        parsed_drones: tuple[str, int] = ()
         first_line: bool = True
         try:
             with open(file_name) as f:
@@ -89,10 +89,10 @@ class Parser:
                     raise ParseError(line_no, f"Invalid metadata: {meta}")
                 for tag in meta[1:-1].split():
                     if tag.count('=') != 1:
-                        ParseError(line_no, f"Invalid tag: '{tag}")
+                        raise ParseError(line_no, f"Invalid tag: '{tag}")
                     key, value = tag.split('=')
                     if key not in ("zone", "color", "max_drones"):
-                        ParseError(line_no, f"unknown tag: '{key}'")
+                        raise ParseError(line_no, f"unknown tag: '{key}'")
                     meta_list[key] = value
             return_hubs.append((hub_type, name, coord, meta_list, line_no))
         return tuple(return_hubs)

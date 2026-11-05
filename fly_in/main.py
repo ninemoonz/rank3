@@ -8,6 +8,7 @@ from src import (Parser,
                  ConnectionsFactory,
                  DronesFactory,
                  RenderMap)
+from validation import Validator
 
 
 if TYPE_CHECKING:
@@ -22,31 +23,41 @@ def parse_all(file_name: str) -> tuple[int, list[str], list[str]]:
     return clean_drones, clean_hubs, clean_conn
 
 
-def make_instance(parsed_drones: str,
-                  parsed_hubs: list[str],
-                  parsed_conns: list[str]) -> tuple[list["Drone"],
-                                                    list["Hub"],
-                                                    list["Connection"]]:
+def run_factory(parsed_drones: str,
+                parsed_hubs: list[str],
+                parsed_conns: list[str]) -> tuple[list["Drone"],
+                                                  list["Hub"],
+                                                  list["Connection"]]:
     produced_drones = DronesFactory().make_drones(parsed_drones)
     produced_hubs = HubsFactory().make_hubs(parsed_hubs, parsed_drones)
     produced_conn = ConnectionsFactory().make_connections(parsed_conns)
     return produced_drones, produced_hubs, produced_conn
 
 
+def validation(parsed_hub) -> None:
+    hubs_validator = Validator(parsed_hub)
+    hubs_validator.is_unique()
+    hubs_validator.unique_zone()
+
+
 if __name__ == "__main__":
-    file_name = "./maps/medium/02_circular_loop.txt"
+    level: str = "medium"
+    stage_name: str = "02_circular_loop.txt"
+    file_name = f"./maps/{level}/{stage_name}"
     try:
         parsed_drone, parsed_hub, parsed_conn = parse_all(file_name)
+        validation(parsed_hub)
     except ParseError as e:
         print(f"[Error] {e}", file=sys.stderr)
         sys.exit(1)
-    drones_list, hubs_list, conns_list = make_instance(parsed_drone,
-                                                       parsed_hub,
-                                                       parsed_conn)
 
-    new_graph = Graph(hubs_list, conns_list)
-    D = Dijkstra(new_graph)
-    shortest = D.shortest_distances()
-    print(f"shortest path: {shortest}")
-    display_map = RenderMap(hubs_list, conns_list)
-    display_map.render_map()
+    drones_list, hubs_list, conns_list = run_factory(parsed_drone,
+                                                     parsed_hub,
+                                                     parsed_conn)
+
+    # new_graph = Graph(hubs_list, conns_list)
+    # D = Dijkstra(new_graph)
+    # shortest = D.shortest_distances()
+    # print(f"shortest path: {shortest}")
+    # display_map = RenderMap(hubs_list, conns_list)
+    # display_map.render_map()
