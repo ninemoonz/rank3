@@ -30,7 +30,6 @@ class Parser:
                         raise ParseError(line_no, f"missing ':' in '{line}'")
                     key, value = line.split(":", 1)
                     clean_key = key.strip()
-
                     if first_line:
                         if clean_key != "nb_drones":
                             raise ParseError(line_no, "first line must be "
@@ -92,7 +91,21 @@ class Parser:
                         raise ParseError(line_no, f"Invalid tag: '{tag}'")
                     key, value = tag.split('=')
                     if key not in ("zone", "color", "max_drones"):
-                        raise ParseError(line_no, f"unknown tag: '{key}'")
+                        raise ParseError(line_no, f"unknown metadata: '{key}'")
+                    if key == "max_drones":
+                        if not value.isdigit():
+                            raise ParseError(line_no, "Must be digits: "
+                                             f"current value: {value}")
+                        if int(value) <= 0:
+                            raise ParseError(line_no, "Need positive integer, "
+                                             f"Current value: {value}")
+                    if (key == "zone" and value not in ("normal",
+                                                        "restricted",
+                                                        "priority",
+                                                        "blocked")):
+                        raise ParseError(line_no, "zone types: 'normal', "
+                                         "'restricted', 'priority', 'blocked.'"
+                                         f" current type: '{value}'")
                     meta_list[key] = value
             return_hubs.append((hub_type, name, coord, meta_list, line_no))
         return tuple(return_hubs)

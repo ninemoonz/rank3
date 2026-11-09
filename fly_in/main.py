@@ -44,9 +44,7 @@ def validation(parsed_hub: tuple[HubData, ...]) -> None:
 
 
 if __name__ == "__main__":
-    level: str = "medium"
-    stage_name: str = "02_circular_loop.txt"
-    file_name = f"./maps/{level}/{stage_name}"
+    file_name = "./maps/test/00_test_map.txt"
     try:
         parsed_drone, parsed_hub, parsed_conn = parse_all(file_name)
         validation(parsed_hub)
