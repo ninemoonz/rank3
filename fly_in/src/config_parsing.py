@@ -104,19 +104,25 @@ class Parser:
                                                         "priority",
                                                         "blocked")):
                         raise ParseError(line_no, "zone types: 'normal', "
-                                         "'restricted', 'priority', 'blocked.'"
+                                         "'restricted', 'priority', 'blocked'"
                                          f" current type: '{value}'")
                     meta_list[key] = value
             return_hubs.append((hub_type, name, coord, meta_list, line_no))
         return tuple(return_hubs)
 
     @staticmethod
-    def parse_connections(connection_data: list[RawConn]) -> tuple[ConnData,
-                                                                   ...]:
+    def parse_connections(
+        connection_data: list[RawConn]
+                        ) -> tuple[ConnData, ...]:
         return_connections: list[ConnData] = []
         for raw_data, line_no in connection_data:
-            split_data = (raw_data.strip().replace(' ', '-')
-                          .split('-', maxsplit=2))
+            strip_data = raw_data.strip()
+            print(f"strip data: '{strip_data}'")
+            if " " not in strip_data:
+                continue
+            else:
+                split_link, metadata = (strip_data.split(' ', maxsplit=1))
+            split_data = split_link.split('-')
             hub_from: str = split_data[0]
             hub_to: str = split_data[1]
             meta_list: dict[str, str] = {}
