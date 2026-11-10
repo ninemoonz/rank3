@@ -22,7 +22,10 @@ def parse_all(file_name: str) -> tuple[int,
     drones, raw_hubs, raw_conn = Parser.file_opener(file_name)
     clean_drones = Parser.parse_drones(drones[0], drones[1])
     clean_hubs = Parser.parse_hubs(raw_hubs)
-    clean_conn = Parser.parse_connections(raw_conn)
+    hub_names = set()
+    for hub in clean_hubs:
+        hub_names.add(hub[1])
+    clean_conn = Parser.parse_connections(raw_conn, hub_names)
     return clean_drones, clean_hubs, clean_conn
 
 

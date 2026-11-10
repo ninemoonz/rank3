@@ -79,7 +79,7 @@ class Parser:
             except ValueError:
                 raise ParseError(line_no, "Coordinate must be integers: "
                                  f"{hub_data_split[1]} "
-                                 f"{hub_data_split[2]}")
+                                 f"{hub_data_split[2]}") 
 
             meta_list: dict[str, str] = {}
             if len(hub_data_split) > 3:
@@ -112,26 +112,44 @@ class Parser:
 
     @staticmethod
     def parse_connections(
-        connection_data: list[RawConn]
+        connection_data: list[RawConn], hub_names: list[str]
                         ) -> tuple[ConnData, ...]:
         return_connections: list[ConnData] = []
+        conn_history = set()
         for raw_data, line_no in connection_data:
-            strip_data = raw_data.strip()
-            print(f"strip data: '{strip_data}'")
-            split_data: list[tuple[str]] | list[tuple[str, str]] = ()
-            if " " not in strip_data:
-                split_data.append(strip_data)
-            else:
-                link_data, meta_data = strip_data.split(" ", max=1)
-                conn_pair: tuple[str, str] = ((link_data, meta_data))
-                split_data.append(conn_pair)
-            hub_from: str = split_data[0]
-            hub_to: str = split_data[1]
+            parts = raw_data.split(maxsplit=1)
+            if len(parts) == 0:
+                raise ParseError(line_no, "empty connection")
+            names = parts[0].split('-')
+            if len(names) != 2 or names[0] == "" or names[1] == "":
+                raise ParseError(line_no, "Connection must be "
+                                 f"'<name1>-<name2>': '{parts[0]}'")
+            hub_a, hub_b = names
+            if hub_a not in hub_names:
+                raise ParseError(line_no, f"hub does not exist: '{hub_a}'")
+            if hub_b not in hub_names:
+                raise ParseError(line_no, f"hub does not exist: '{hub_b}'")
+            if hub_a == hub_b:
+                raise ParseError(line_no, "should not connect same hub: "
+                                 f"'{hub_a}'-'{hub_b}'")
             meta_list: dict[str, str] = {}
-            if len(split_data) > 2:
-                meta_split = split_data[2].strip('[]').split(' ')
-                for data in meta_split:
-                    key, value = data.strip().split('=')
-                    meta_list[key] = value
-            return_connections.append((hub_from, hub_to, meta_list, line_no))
+            if len(parts) == 2:
+                meta_data = parts[1]
+                if not (meta_data.startswith('[') and meta_data.endswith(']')):
+                    raise ParseError(line_no, f"invalid metadata: {meta_data}")
+                for tag in meta_data[1:-1].split():
+                    if tag.count('=') != 1:
+                        raise ParseError(line_no, f"invalid tag: '{tag}'")
+                    max_cap, count = tag.split('=')
+                    if max_cap != "max_link_capacity":
+                        raise ParseError(line_no, "metadata should be "
+                                         f"'max_link_capacity': {max_cap}")
+                    if not count.isdigit():
+                        raise ParseError(line_no, "value should be "
+                                         f"a number: {count}")
+                    if int(count) <= 0:
+                        raise ParseError(line_no, "value should "
+                                         f"be greater than 0: {count}")
+                    meta_list[max_cap] = count
+            return_connections.append((hub_a, hub_b, meta_list, line_no))
         return tuple(return_connections)
