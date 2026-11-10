@@ -118,11 +118,13 @@ class Parser:
         for raw_data, line_no in connection_data:
             strip_data = raw_data.strip()
             print(f"strip data: '{strip_data}'")
+            split_data: list[tuple[str]] | list[tuple[str, str]] = ()
             if " " not in strip_data:
-                continue
+                split_data.append(strip_data)
             else:
-                split_link, metadata = (strip_data.split(' ', maxsplit=1))
-            split_data = split_link.split('-')
+                link_data, meta_data = strip_data.split(" ", max=1)
+                conn_pair: tuple[str, str] = ((link_data, meta_data))
+                split_data.append(conn_pair)
             hub_from: str = split_data[0]
             hub_to: str = split_data[1]
             meta_list: dict[str, str] = {}
