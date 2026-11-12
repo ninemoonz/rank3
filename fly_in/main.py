@@ -22,7 +22,7 @@ def parse_all(file_name: str) -> tuple[int,
     drones, raw_hubs, raw_conn = Parser.file_opener(file_name)
     clean_drones = Parser.parse_drones(drones[0], drones[1])
     clean_hubs = Parser.parse_hubs(raw_hubs)
-    hub_names = set()
+    hub_names: set[str] = set()
     for hub in clean_hubs:
         hub_names.add(hub[1])
     clean_conn = Parser.parse_connections(raw_conn, hub_names)
@@ -54,6 +54,9 @@ if __name__ == "__main__":
         drones_list, hubs_list, conns_list = run_factory(parsed_drone,
                                                          parsed_hub,
                                                          parsed_conn)
+        for conn in conns_list:
+            print(f"from: {conn.hub_from} | to: {conn.hub_to}")
+
     except (ParseError, ValidationError) as e:
         print(f"[Error] {e}", file=sys.stderr)
         sys.exit(1)

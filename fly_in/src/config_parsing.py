@@ -112,10 +112,10 @@ class Parser:
 
     @staticmethod
     def parse_connections(
-        connection_data: list[RawConn], hub_names: list[str]
+        connection_data: list[RawConn], hub_names: set[str]
                         ) -> tuple[ConnData, ...]:
         return_connections: list[ConnData] = []
-        conn_history = set()
+        link_history: set[frozenset[str]] = set()
         for raw_data, line_no in connection_data:
             parts = raw_data.split(maxsplit=1)
             if len(parts) == 0:
@@ -125,6 +125,11 @@ class Parser:
                 raise ParseError(line_no, "Connection must be "
                                  f"'<name1>-<name2>': '{parts[0]}'")
             hub_a, hub_b = names
+            pair = frozenset((hub_a, hub_b))
+            if pair in link_history:
+                raise ParseError(line_no, "duplicate connection")
+            link_history.add(pair)
+
             if hub_a not in hub_names:
                 raise ParseError(line_no, f"hub does not exist: '{hub_a}'")
             if hub_b not in hub_names:
