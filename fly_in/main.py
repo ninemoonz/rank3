@@ -53,12 +53,14 @@ if __name__ == "__main__":
         validation(parsed_hub)
         drones_list, hubs_list, conns_list = run_factory(parsed_drone,
                                                          parsed_hub,
-                                                         parsed_conn)
+                                                         parsed_conn)        
+        new_graph = Graph(hubs_list, conns_list)
+        for node in new_graph.nodes:
+            print(f"objects: {node} | {new_graph.hubs[node]}")
     except (ParseError, ValidationError) as e:
         print(f"[Error] {e}", file=sys.stderr)
         sys.exit(1)
 
-    # new_graph = Graph(hubs_list, conns_list)
     # D = Dijkstra(new_graph)
     # shortest = D.shortest_distances()
     # print(f"shortest path: {shortest}")
