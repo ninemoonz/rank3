@@ -21,9 +21,8 @@ class Hub(BaseModel):
     name: str = Field(min_length=1)
     coord: tuple[int, int]
     zone: str = Field(default="normal")
-    color: str = Field(default=None)
+    color: str = Field(default="purple")
     max_drones: int = Field(default=1)
-    visited: bool = Field(default=False)
     cost: int = Field(default=5)
 
     @model_validator(mode='after')

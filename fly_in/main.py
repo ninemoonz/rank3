@@ -54,9 +54,6 @@ if __name__ == "__main__":
         drones_list, hubs_list, conns_list = run_factory(parsed_drone,
                                                          parsed_hub,
                                                          parsed_conn)
-        for conn in conns_list:
-            print(f"from: {conn.hub_from} | to: {conn.hub_to}")
-
     except (ParseError, ValidationError) as e:
         print(f"[Error] {e}", file=sys.stderr)
         sys.exit(1)

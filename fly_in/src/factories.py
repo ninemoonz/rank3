@@ -1,12 +1,11 @@
 from .class_model import Drone, Hub, Connection
-from .config_parsing import HubData, ConnData, ParseError
-from pydantic import ValidationError
+from .config_parsing import HubData, ConnData
 
 
 class DronesFactory:
     def make_drones(self, drone_info: int) -> list[Drone]:
         drone_list: list[Drone] = []
-        for i in range(drone_info):
+        for i in range(1, drone_info + 1):
             new_drone = Drone(drone_nb=i)
             drone_list.append(new_drone)
         return drone_list
@@ -28,7 +27,6 @@ class HubsFactory:
                                           **meta_dict})
             if hub_type in ("start_hub", "end_hub"):
                 new_hub.max_drones = drones
-            if new_hub.name == "start" or new_hub.name == "goal":
                 new_hub.cost = 0
             elif new_hub.zone == "priority":
                 new_hub.cost = 1
