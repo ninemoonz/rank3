@@ -33,6 +33,9 @@ class Dijkstra:
                 if distance_so_far < distances[neighbor]:
                     distances[neighbor] = distance_so_far
                     heappush(pq, (distance_so_far, neighbor))
+
+        if distances[target] == float("inf"):
+            raise ValueError(f"No path from {source} to {target}")
         predecessors = {node: None for node in self.graph}
 
         for node, distance in distances.items():

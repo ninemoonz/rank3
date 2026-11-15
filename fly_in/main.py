@@ -58,12 +58,14 @@ if __name__ == "__main__":
         print("[Graph nodes]")
         for node in new_graph.nodes:
             print(f"objects: {node} | {new_graph.hubs[node]}")
-    except (ParseError, ValidationError) as e:
+
+        D = Dijkstra(new_graph)
+        shortest = D.shortest_distances()
+        print(f"shortest path: {shortest}")
+        # display_map = RenderMap(hubs_list, conns_list)
+        # display_map.render_map()
+
+    except (ParseError, ValidationError, ValueError) as e:
         print(f"[Error] {e}", file=sys.stderr)
         sys.exit(1)
 
-    # D = Dijkstra(new_graph)
-    # shortest = D.shortest_distances()
-    # print(f"shortest path: {shortest}")
-    # display_map = RenderMap(hubs_list, conns_list)
-    # display_map.render_map()
