@@ -23,7 +23,7 @@ class Hub(BaseModel):
     zone: str = Field(default="normal")
     color: str = Field(default="purple")
     max_drones: int = Field(default=1)
-    cost: int = Field(default=5)
+    cost: int = Field(default=1)
 
     @model_validator(mode='after')
     def hub_validation(self) -> 'Hub':
