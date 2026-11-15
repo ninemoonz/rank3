@@ -31,7 +31,7 @@ class HubsFactory:
             elif new_hub.zone == "priority":
                 new_hub.cost = 1
             elif new_hub.zone == "restricted":
-                new_hub.cost = 10
+                new_hub.cost = 2
             hub_list.append(new_hub)
         return hub_list
 

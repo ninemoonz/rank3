@@ -55,6 +55,7 @@ if __name__ == "__main__":
                                                          parsed_hub,
                                                          parsed_conn)        
         new_graph = Graph(hubs_list, conns_list)
+        print("[Graph nodes]")
         for node in new_graph.nodes:
             print(f"objects: {node} | {new_graph.hubs[node]}")
     except (ParseError, ValidationError) as e:

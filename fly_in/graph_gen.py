@@ -13,9 +13,9 @@ class Graph:
             self.hubs[node.name] = node
 
         for node in hub_list:
-            inner: dict[str, int] = {}
             if node.zone == "blocked":
                 continue
+            inner: dict[str, int] = {}
             for conn in conn_list:
                 if node.name == conn.hub_from:
                     inner[conn.hub_to] = cost[conn.hub_to]
