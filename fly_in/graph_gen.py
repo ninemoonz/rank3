@@ -15,10 +15,15 @@ class Graph:
         for node in hub_list:
             if node.zone == "blocked":
                 continue
-            inner: dict[str, int] = {}
-            for conn in conn_list:
-                if node.name == conn.hub_from:
-                    if self.hubs[conn.hub_to].zone == "blocked":
-                        continue
-                    inner[conn.hub_to] = cost[conn.hub_to]
-            self.nodes[node.name] = inner
+            self.nodes[node.name] = {}
+
+        for conn in conn_list:
+            a = conn.hub_from
+            b = conn.hub_to
+            if a not in self.nodes or b not in self.nodes:
+                continue
+            self.nodes[a][b] = cost[b]
+            self.nodes[b][a] = cost[a]
+
+        for node in self.nodes:
+            print(f"node '{node}': {self.nodes[node]}")
