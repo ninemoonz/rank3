@@ -28,10 +28,12 @@ class HubsFactory:
             if hub_type in ("start_hub", "end_hub"):
                 new_hub.max_drones = drones
                 new_hub.cost = 0
-            elif new_hub.zone in ("normal", "priority"):
-                new_hub.cost = 1
+            elif new_hub.zone == "priority":
+                new_hub.cost = 9
             elif new_hub.zone == "restricted":
-                new_hub.cost = 2
+                new_hub.cost = 20
+            else:
+                new_hub.cost = 10
             hub_list.append(new_hub)
         return hub_list
 
