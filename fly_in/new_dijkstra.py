@@ -5,17 +5,17 @@ from graph_gen import Graph
 class Dijkstra:
     def __init__(self, graph: Graph) -> None:
         self.graph = graph.nodes
+        self.start = graph.start
+        self.end = graph.end
 
-    def shortest_distances(self,
-                           source: str = "start",
-                           target: str = "goal") -> list[str]:
+    def shortest_distances(self) -> list[str]:
         # Initialize the values of all nodes with infinity
         distances: dict[str, int] = {}
         for node in self.graph:
             distances[node] = float("inf")
-        distances[source] = 0
+        distances[self.start] = 0
         # initialize a priority queue
-        pq = [(0, source)]
+        pq = [(0, self.start)]
         heapify(pq)
 
         # Create a set to hold visted nodes
@@ -25,7 +25,7 @@ class Dijkstra:
             current_distance, current_node = heappop(pq)
 
             if current_node in visited:
-                continue  # Skip already visited nodes
+                continue
             visited.add(current_node)
 
             for neighbor, weight in self.graph[current_node].items():
@@ -34,8 +34,8 @@ class Dijkstra:
                     distances[neighbor] = distance_so_far
                     heappush(pq, (distance_so_far, neighbor))
 
-        if distances[target] == float("inf"):
-            raise ValueError(f"No path from {source} to {target}")
+        if distances[self.end] == float("inf"):
+            raise ValueError(f"No path from {self.start} to {self.end}")
         predecessors = {node: None for node in self.graph}
 
         for node, distance in distances.items():
@@ -44,8 +44,7 @@ class Dijkstra:
                     predecessors[neighbor] = node
 
         path = []
-        current_node = target
-
+        current_node = self.end
         while current_node:
             path.append(current_node)
             current_node = predecessors[current_node]

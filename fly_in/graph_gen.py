@@ -6,12 +6,17 @@ class Graph:
                  conn_list: list[Connection]) -> None:
         self.nodes: dict[str, dict[str, int]] = {}
         self.hubs: dict[str, Hub] = {}
+        self.start: str = ""
+        self.end: str = ""
 
         cost: dict[str, int] = {}
         for node in hub_list:
+            if node.hub_type == "start_hub":
+                self.start = node.name
+            if node.hub_type == "end_hub":
+                self.end = node.name
             cost[node.name] = node.cost
             self.hubs[node.name] = node
-
         for node in hub_list:
             if node.zone == "blocked":
                 continue
@@ -24,6 +29,3 @@ class Graph:
                 continue
             self.nodes[a][b] = cost[b]
             self.nodes[b][a] = cost[a]
-
-        for node in self.nodes:
-            print(f"node '{node}': {self.nodes[node]}")
