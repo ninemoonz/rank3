@@ -55,10 +55,6 @@ if __name__ == "__main__":
                                                          parsed_hub,
                                                          parsed_conn)        
         new_graph = Graph(hubs_list, conns_list)
-        print("[Graph nodes]")
-        for node in new_graph.nodes:
-            print(f"objects: {node} | {new_graph.hubs[node]}")
-
         D = Dijkstra(new_graph)
         shortest = D.shortest_distances()
         print(f"shortest path: {shortest}")
@@ -68,4 +64,3 @@ if __name__ == "__main__":
     except (ParseError, ValidationError, ValueError) as e:
         print(f"[Error] {e}", file=sys.stderr)
         sys.exit(1)
-
