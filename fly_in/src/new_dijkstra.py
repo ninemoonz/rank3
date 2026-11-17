@@ -1,5 +1,5 @@
 from heapq import heapify, heappop, heappush
-from graph_gen import Graph
+from src.graph_gen import Graph
 
 
 class Dijkstra:

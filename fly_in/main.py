@@ -1,7 +1,7 @@
 import sys
 from pydantic import ValidationError
-from graph_gen import Graph
-from new_dijkstra import Dijkstra
+from src.graph_gen import Graph
+from src.new_dijkstra import Dijkstra
 from typing import TYPE_CHECKING
 from src.config_parsing import ParseError, HubData, ConnData
 from src import (Parser,
@@ -9,7 +9,7 @@ from src import (Parser,
                  ConnectionsFactory,
                  DronesFactory,
                  RenderMap)
-from validation import Validator
+from src.validation import Validator
 
 
 if TYPE_CHECKING:
