@@ -10,16 +10,16 @@ class Dijkstra:
 
     def shortest_distances(self) -> list[str]:
         # Initialize the values of all nodes with infinity
-        distances: dict[str, int] = {}
+        distances: dict[str, float] = {}
         for node in self.graph:
             distances[node] = float("inf")
         distances[self.start] = 0
         # initialize a priority queue
-        pq = [(0, self.start)]
+        pq: list[tuple[float, str]] = [(0, self.start)]
         heapify(pq)
 
         # Create a set to hold visted nodes
-        visited = set()
+        visited: set[str] = set()
 
         while pq:
             current_distance, current_node = heappop(pq)
@@ -36,17 +36,18 @@ class Dijkstra:
 
         if distances[self.end] == float("inf"):
             raise ValueError(f"No path from {self.start} to {self.end}")
-        predecessors = {node: None for node in self.graph}
+        predecessors: dict[str, str | None] = ({node: None for
+                                                node in self.graph})
 
         for node, distance in distances.items():
             for neighbor, weight in self.graph[node].items():
                 if distances[neighbor] == distance + weight:
                     predecessors[neighbor] = node
 
-        path = []
-        current_node = self.end
-        while current_node:
-            path.append(current_node)
-            current_node = predecessors[current_node]
+        path: list[str] = []
+        step: str | None = self.end
+        while step:
+            path.append(step)
+            step = predecessors[step]
         path.reverse()
         return path

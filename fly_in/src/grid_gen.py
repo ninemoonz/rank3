@@ -29,15 +29,15 @@ class MapGen:
             grid.append(row_list)
         return grid
 
-    def place_hubs(self) -> list[list[tuple[int, int]]]:
-        new_grid = self.grid
-        for y, line in enumerate(new_grid):
-            for x, coord in enumerate(line):
-                for hub in self.hubs:
-                    if hub.coord == coord:
-                        new_grid[y][x] = hub
-        for y, line in enumerate(new_grid):
-            for x, element in enumerate(line):
-                if type(element) is not Hub:
-                    new_grid[y][x] = None
-        return new_grid
+    # def place_hubs(self) -> list[list[tuple[int, int]]]:
+    #     new_grid = self.grid
+    #     for y, line in enumerate(new_grid):
+    #         for x, coord in enumerate(line):
+    #             for hub in self.hubs:
+    #                 if hub.coord == coord:
+    #                     new_grid[y][x] = hub
+    #     for y, line in enumerate(new_grid):
+    #         for x, element in enumerate(line):
+    #             if type(element) is not Hub:
+    #                 new_grid[y][x] = None
+    #     return new_grid
