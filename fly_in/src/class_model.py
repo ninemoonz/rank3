@@ -3,7 +3,7 @@ from typing import Optional
 
 
 class Drone(BaseModel):
-    drone_nb: int
+    drone_nb: str
     before_hub: Optional[tuple[str, tuple[int, int]]] = Field(default=None)
     present_hub: tuple[str, tuple[int, int]] | None = Field(default=None)
     next_hub: Optional[tuple[str, tuple[int, int]]] = Field(default=None)

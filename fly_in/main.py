@@ -48,20 +48,21 @@ def validation(parsed_hub: tuple[HubData, ...]) -> None:
 
 
 if __name__ == "__main__":
-    file_name = "./maps/test/00_test_map.txt"
+    file_name = "./maps/easy/01_linear_path.txt"
     try:
         parsed_drone, parsed_hub, parsed_conn = parse_all(file_name)
         validation(parsed_hub)
         drones_list, hubs_list, conns_list = run_factory(parsed_drone,
                                                          parsed_hub,
-                                                         parsed_conn)        
+                                                         parsed_conn)
         new_graph = Graph(hubs_list, conns_list)
         D = Dijkstra(new_graph)
         shortest = D.shortest_distances()
         print(f"shortest path: {shortest}")
-        # display_map = RenderMap(hubs_list, conns_list)
-        # display_map.render_map()
+        display_map = RenderMap(hubs_list, conns_list)
+        display_map.render_map()
         drone_sim = Simulation(new_graph, drones_list, shortest)
+        # # drone_sim.one_turn()
     except (ParseError, ValidationError, ValueError) as e:
         print(f"[Error] {e}", file=sys.stderr)
         sys.exit(1)

@@ -6,7 +6,8 @@ class DronesFactory:
     def make_drones(self, drone_info: int) -> list[Drone]:
         drone_list: list[Drone] = []
         for i in range(1, drone_info + 1):
-            new_drone = Drone(drone_nb=i)
+            drone_num: str = "D" + str(i)
+            new_drone = Drone(drone_nb=drone_num)
             drone_list.append(new_drone)
         return drone_list
 
