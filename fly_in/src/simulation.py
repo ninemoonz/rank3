@@ -14,4 +14,9 @@ class Simulation:
             self.position[drone.drone_nb] = self.graph.start
 
     def one_turn(self) -> None:
-        ...
+        for drone in self.drones:
+            current_hub = self.position[drone.drone_nb]
+            path_index = self.path.index(current_hub)
+            next_hub = self.path[path_index + 1]
+            print(drone.drone_nb, next_hub)
+            
