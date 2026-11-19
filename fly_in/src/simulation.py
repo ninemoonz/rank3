@@ -15,9 +15,15 @@ class Simulation:
 
     def one_turn(self) -> None:
         for drone in self.drones:
-            current_hub = self.position[drone.drone_nb]
-            path_index = self.path.index(current_hub)
-            next_hub = self.path[path_index + 1]
-            
-            self.position[drone.drone_nb] = next_hub
-            print(drone.drone_nb, next_hub)
+            current_hub = self.position[drone.drone_nb]  # current_hub = start
+            path_index = self.path.index(current_hub)  # path_index = 0
+            next_hub = self.path[path_index + 1]  # next_hub = waypoint1
+            drone_count: int = 0
+            for hub in self.position.values():  # [start, start]
+                if hub == next_hub:
+                    drone_count += 1
+            drone_limit: int = self.graph.hubs[next_hub].max_drones
+            if drone_count >= drone_limit:
+                continue
+            self.position[drone.drone_nb] = next_hub  # {D1: 'waypoint1', D2: 'start'}
+        print(self.position)
