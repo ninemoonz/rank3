@@ -35,4 +35,16 @@ class Simulation:
         print(result)
 
     def run(self) -> None:
-        ...
+        turn_counter: int = 0
+        while not self.all_arrived():
+            self.one_turn()
+            turn_counter += 1
+        print(f"turn: {turn_counter}")
+
+    def all_arrived(self) -> bool:
+        finished: int = 0
+        finished_number = len(self.position)
+        for value in self.position.values():
+            if value == self.graph.end:
+                finished += 1
+        return (finished_number == finished)
