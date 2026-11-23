@@ -31,5 +31,8 @@ class Simulation:
             self.position[drone.drone_nb] = next_hub
             drone_move: str = drone.drone_nb + "-" + next_hub
             moves.append(drone_move)
-            result = " ".join(moves) 
+        result = " ".join(moves)
         print(result)
+
+    def run(self) -> None:
+        ...
