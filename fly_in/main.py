@@ -71,12 +71,8 @@ if __name__ == "__main__":
         # display_map = RenderMap(hubs_list, conns_list)
         # display_map.render_map()
         drone_sim = Simulation(new_graph, drones_list, shortest)
-        print("[Turn 0]")
-        print(f"{drone_sim.position}\n")
         for i in range(1, 5):
-            print(f"[Turn {i}]")
             drone_sim.one_turn()
-            print()
     except (ParseError, ValidationError, ValueError) as e:
         print(f"[Error] {e}", file=sys.stderr)
         sys.exit(1)

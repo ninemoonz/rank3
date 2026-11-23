@@ -14,6 +14,7 @@ class Simulation:
             self.position[drone.drone_nb] = self.graph.start
 
     def one_turn(self) -> None:
+        moves: list[str] = []
         for drone in self.drones:
             current_hub = self.position[drone.drone_nb]  # current_hub = start
             if current_hub == self.graph.end:
@@ -28,4 +29,7 @@ class Simulation:
             if drone_count >= drone_limit:
                 continue
             self.position[drone.drone_nb] = next_hub
-        print(self.position)
+            drone_move: str = drone.drone_nb + "-" + next_hub
+            moves.append(drone_move)
+            result = " ".join(moves) 
+        print(result)
