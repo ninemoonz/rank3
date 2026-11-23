@@ -8,6 +8,7 @@ class Graph:
         self.hubs: dict[str, Hub] = {}
         self.start: str = ""
         self.end: str = ""
+        self.links: dict[frozenset[str], Connection] = {}
 
         cost: dict[str, int] = {}
         for node in hub_list:
@@ -27,5 +28,7 @@ class Graph:
             b = conn.hub_to
             if a not in self.nodes or b not in self.nodes:
                 continue
+            link_key = frozenset((a, b))
+            self.links[link_key] = conn
             self.nodes[a][b] = cost[b]
             self.nodes[b][a] = cost[a]
