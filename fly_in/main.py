@@ -48,6 +48,15 @@ def validation(parsed_hub: tuple[HubData, ...]) -> None:
 
 
 if __name__ == "__main__":
+    '''
+    file names:
+    "./maps/easy/01_linear_path.txt"
+    "./maps/easy/02_simple_fork.txt"
+    "./maps/easy/03_basic_capacity.txt"
+    "./maps/medium/01_dead_end_trap.txt"
+    "./maps/medium/02_circular_loop.txt"
+    "./maps/medium/03_priority_puzzle.txt"
+    '''
     file_name = "./maps/easy/01_linear_path.txt"
     try:
         parsed_drone, parsed_hub, parsed_conn = parse_all(file_name)
@@ -62,7 +71,12 @@ if __name__ == "__main__":
         # display_map = RenderMap(hubs_list, conns_list)
         # display_map.render_map()
         drone_sim = Simulation(new_graph, drones_list, shortest)
-        drone_sim.one_turn()
+        print("[Turn 0]")
+        print(f"{drone_sim.position}\n")
+        for i in range(1, 5):
+            print(f"[Turn {i}]")
+            drone_sim.one_turn()
+            print()
     except (ParseError, ValidationError, ValueError) as e:
         print(f"[Error] {e}", file=sys.stderr)
         sys.exit(1)
