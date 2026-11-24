@@ -15,6 +15,7 @@ class Simulation:
 
     def one_turn(self) -> None:
         moves: list[str] = []
+        drone_cross: dict[frozenset[str], int] = {}
         for drone in self.drones:
             current_hub = self.position[drone.drone_nb]  # current_hub = start
             if current_hub == self.graph.end:
@@ -28,7 +29,15 @@ class Simulation:
             drone_limit: int = self.graph.hubs[next_hub].max_drones
             if drone_count >= drone_limit:
                 continue
+            # connection check
+            link_key = frozenset((current_hub, next_hub))
+            if link_key not in drone_cross:
+                drone_cross[link_key] = 0
+            link_limit: int = self.graph.links[link_key].max_link_capacity
+            if drone_cross[link_key] >= link_limit:
+                continue
             self.position[drone.drone_nb] = next_hub
+            drone_cross[link_key] += 1
             drone_move: str = drone.drone_nb + "-" + next_hub
             moves.append(drone_move)
         result = " ".join(moves)
