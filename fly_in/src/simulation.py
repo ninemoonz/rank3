@@ -22,6 +22,7 @@ class Simulation:
                 continue
             path_index = self.path.index(current_hub)  # path_index = 0
             next_hub = self.path[path_index + 1]  # next_hub = waypoint1
+            # drone counting
             drone_count: int = 0
             for hub in self.position.values():
                 if hub == next_hub:
