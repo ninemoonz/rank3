@@ -9,6 +9,7 @@ class Simulation:
         self.drones = drones
         self.path = path
         self.position: dict[str, str] = {}  # drone_name: hub_name
+        self.in_transit: dict[str, str] = {}
 
         for drone in self.drones:
             self.position[drone.drone_nb] = self.graph.start
