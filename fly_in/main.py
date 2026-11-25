@@ -56,8 +56,9 @@ if __name__ == "__main__":
     "./maps/medium/01_dead_end_trap.txt"
     "./maps/medium/02_circular_loop.txt"
     "./maps/medium/03_priority_puzzle.txt"
+    "./maps/test/00_test_maps.txt"
     '''
-    file_name = "./maps/easy/03_basic_capacity.txt"
+    file_name = "./maps/test/00_test_map.txt"
     try:
         parsed_drone, parsed_hub, parsed_conn = parse_all(file_name)
         validation(parsed_hub)
@@ -68,11 +69,11 @@ if __name__ == "__main__":
         D = Dijkstra(new_graph)
         shortest = D.shortest_distances()
         print(f"shortest path: {shortest}")
-        # display_map = RenderMap(hubs_list, conns_list)
-        # display_map.render_map()
         print(f"Number of Drones: {len(drones_list)}")
         drone_sim = Simulation(new_graph, drones_list, shortest)
         drone_sim.run()
+        display_map = RenderMap(hubs_list, conns_list)
+        display_map.render_map()
     except (ParseError, ValidationError, ValueError) as e:
         print(f"[Error] {e}", file=sys.stderr)
         sys.exit(1)
