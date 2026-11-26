@@ -1,6 +1,0 @@
-nb_drones: 3
-start_hub: start 0 0
-hub: r 1 0 [zone=restricted]
-end_hub: goal 2 0
-connection: start-r
-connection: r-goal
