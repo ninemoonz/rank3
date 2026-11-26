@@ -29,7 +29,7 @@ class Simulation:
                 self.in_transit.pop(drone.drone_nb)
                 landing: str = drone.drone_nb + "-" + next_hub
                 moves.append(landing)
-                continue 
+                continue
             # drone counting
             drone_count: int = 0
             for hub in self.position.values():
