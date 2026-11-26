@@ -15,15 +15,21 @@ class Simulation:
             self.position[drone.drone_nb] = self.graph.start
 
     def one_turn(self) -> None:
+        """
+        one_turn method will implement the movement of drone in one turn.
+        this method will be repeated until all the drones reach the goal.
+        this method is implemented in run method.
+        """
         moves: list[str] = []
         drone_cross: dict[frozenset[str], int] = {}
         for drone in self.drones:
-            current_hub = self.position[drone.drone_nb]  # current_hub = start
+            current_hub = self.position[drone.drone_nb]
+            # checks if the drone arrived to the final destination
             if current_hub == self.graph.end:
                 continue
-            path_index = self.path.index(current_hub)  # path_index = 0
-            next_hub = self.path[path_index + 1]  # next_hub = waypoint1
-            # from link to next hub
+            path_index = self.path.index(current_hub)
+            next_hub = self.path[path_index + 1]
+            # from link to next hub for restricted zone case
             if drone.drone_nb in self.in_transit.keys():
                 link_key = frozenset((current_hub, next_hub))
                 if link_key not in drone_cross:
@@ -36,7 +42,9 @@ class Simulation:
                 continue
             # drone counting
             drone_count: int = 0
-            for hub in self.position.values():
+            for name, hub in self.position.items():
+                if name in self.in_transit:
+                    continue
                 if hub == next_hub:
                     drone_count += 1
             for transit in self.in_transit.values():
@@ -68,6 +76,9 @@ class Simulation:
         print(result)
 
     def run(self) -> None:
+        """
+        run method is a loop which will keep going until all the drones arrive.
+        """
         turn_counter: int = 0
         while not self.all_arrived():
             self.one_turn()
@@ -75,6 +86,9 @@ class Simulation:
         print(f"turn: {turn_counter}")
 
     def all_arrived(self) -> bool:
+        """
+        all_arrived method will check if all the drones arrived to goal or not.
+        """
         finished: int = 0
         finished_number = len(self.position)
         for value in self.position.values():

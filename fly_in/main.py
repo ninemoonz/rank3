@@ -58,7 +58,7 @@ if __name__ == "__main__":
     "./maps/medium/03_priority_puzzle.txt"
     "./maps/test/00_test_maps.txt"
     '''
-    file_name = "./maps/test/00_test_map.txt"
+    file_name = "./maps/medium/02_circular_loop.txt"
     try:
         parsed_drone, parsed_hub, parsed_conn = parse_all(file_name)
         validation(parsed_hub)
@@ -73,8 +73,8 @@ if __name__ == "__main__":
         drone_sim = Simulation(new_graph, drones_list, shortest)
         drone_sim.run()
         # display
-		# display_map = RenderMap(hubs_list, conns_list)
-        # display_map.render_map()
+        display_map = RenderMap(hubs_list, conns_list)
+        display_map.render_map()
     except (ParseError, ValidationError, ValueError) as e:
         print(f"[Error] {e}", file=sys.stderr)
         sys.exit(1)
