@@ -25,6 +25,10 @@ class Simulation:
             next_hub = self.path[path_index + 1]  # next_hub = waypoint1
             # from link to next hub
             if drone.drone_nb in self.in_transit.keys():
+                link_key = frozenset((current_hub, next_hub))
+                if link_key not in drone_cross:
+                    drone_cross[link_key] = 0
+                drone_cross[link_key] += 1
                 self.position[drone.drone_nb] = next_hub
                 self.in_transit.pop(drone.drone_nb)
                 landing: str = drone.drone_nb + "-" + next_hub
@@ -34,6 +38,9 @@ class Simulation:
             drone_count: int = 0
             for hub in self.position.values():
                 if hub == next_hub:
+                    drone_count += 1
+            for transit in self.in_transit.values():
+                if transit == next_hub:
                     drone_count += 1
             drone_limit: int = self.graph.hubs[next_hub].max_drones
             if drone_count >= drone_limit:
