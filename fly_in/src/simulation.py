@@ -9,7 +9,7 @@ class Simulation:
         self.drones = drones
         self.path = path
         self.position: dict[str, str] = {}  # drone_name: hub_name
-        self.in_transit: dict[str, str] = {} # drone_name: next_hub
+        self.in_transit: dict[str, str] = {}  # drone_name: next_hub
 
         for drone in self.drones:
             self.position[drone.drone_nb] = self.graph.start
@@ -23,7 +23,13 @@ class Simulation:
                 continue
             path_index = self.path.index(current_hub)  # path_index = 0
             next_hub = self.path[path_index + 1]  # next_hub = waypoint1
-
+            # from link to next hub
+            if drone.drone_nb in self.in_transit.keys():
+                self.position[drone.drone_nb] = next_hub
+                self.in_transit.pop(drone.drone_nb)
+                landing: str = drone.drone_nb + "-" + next_hub
+                moves.append(landing)
+                continue 
             # drone counting
             drone_count: int = 0
             for hub in self.position.values():
@@ -32,7 +38,6 @@ class Simulation:
             drone_limit: int = self.graph.hubs[next_hub].max_drones
             if drone_count >= drone_limit:
                 continue
-
             # connection check
             link_key = frozenset((current_hub, next_hub))
             if link_key not in drone_cross:
@@ -40,7 +45,6 @@ class Simulation:
             link_limit: int = self.graph.links[link_key].max_link_capacity
             if drone_cross[link_key] >= link_limit:
                 continue
-
             # zone restriction check
             zone_type: str = self.graph.hubs[next_hub].zone
             transit_link: str = (current_hub + "-" + next_hub)
